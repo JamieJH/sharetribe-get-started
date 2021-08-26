@@ -75,6 +75,8 @@
 
   /* ================ Z-index base levels ================ */
 
+  --zIndexMapToggler: 1;
+
   /* topbar is positioned slightly above content */
   --zIndexTopbar: 10;
   /* small popups on UI should use z-indexes above 50 */
@@ -117,7 +119,8 @@
   /* ================ LocationAutocompleteInput bottom attribution padding ================ */
 
   /* Google Maps needs 72px bottom padding to accommodate logo, Mapbox doesn't have one */
-  --locationAutocompleteBottomPadding: 8px;
+  /* --locationAutocompleteBottomPadding: 8px; */
+  --locationAutocompleteBottomPadding: 72px;
 
   --LocationAutocompleteInput_inputHeight: 50px;
   --LocationAutocompleteInput_sidePaddingDesktop: 36px;

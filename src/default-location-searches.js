@@ -7,41 +7,42 @@ const { LatLng, LatLngBounds } = sdkTypes;
 //
 // Each item in the array should be an object with a unique `id` (String) and a
 // `predictionPlace` (util.types.place) properties.
+// LatLngBounds: (NE, SW); NE: (top lat, right long); SW: (bottom lat, left long)
 const defaultLocations = [
   {
-    id: 'default-helsinki',
+    id: 'default-hcm',
     predictionPlace: {
-      address: 'Helsinki, Finland',
-      bounds: new LatLngBounds(new LatLng(60.29783, 25.25448), new LatLng(59.92248, 24.78287)),
+      address: 'Ho Chi Minh City, Vietnam',
+      bounds: new LatLngBounds(new LatLng(11.1602136037603, 107.0265769179448), new LatLng(10.34937042531151, 106.3638783822327)),
     },
   },
   {
-    id: 'default-turku',
+    id: 'default-hanoi',
     predictionPlace: {
-      address: 'Turku, Finland',
-      bounds: new LatLngBounds(new LatLng(60.53045, 22.38197), new LatLng(60.33361, 22.06644)),
+      address: 'Hanoi, Vietnam',
+      bounds: new LatLngBounds(new LatLng(21.05038011368417, 105.876445869669), new LatLng(20.99509906891873, 105.7974814649321)),
     },
   },
   {
-    id: 'default-tampere',
+    id: 'default-ang-mo-kio',
     predictionPlace: {
-      address: 'Tampere, Finland',
-      bounds: new LatLngBounds(new LatLng(61.83657, 24.11838), new LatLng(61.42728, 23.5422)),
+      address: 'Ang Mo Kio, Singapore',
+      bounds: new LatLngBounds(new LatLng(1.397721839127159, 103.8609150756841), new LatLng(1.355478941160012, 103.8166767162855)),
     },
   },
   {
-    id: 'default-oulu',
+    id: 'default-bukit-batok',
     predictionPlace: {
-      address: 'Oulu, Finland',
-      bounds: new LatLngBounds(new LatLng(65.56434, 26.77069), new LatLng(64.8443, 24.11494)),
+      address: 'Bukit Batok, Singapore',
+      bounds: new LatLngBounds(new LatLng(1.379648922141728, 103.7703429517945), new LatLng(1.332504612862478, 103.7365401096342)),
     },
   },
-  {
-    id: 'default-ruka',
-    predictionPlace: {
-      address: 'Ruka, Finland',
-      bounds: new LatLngBounds(new LatLng(66.16997, 29.16773), new LatLng(66.16095, 29.13572)),
-    },
-  },
+  // {
+  //   id: 'default-ruka',
+  //   predictionPlace: {
+  //     address: 'Ruka, Finland',
+  //     bounds: new LatLngBounds(new LatLng(66.16997, 29.16773), new LatLng(66.16095, 29.13572)),
+  //   },
+  // },
 ];
 export default defaultLocations;
