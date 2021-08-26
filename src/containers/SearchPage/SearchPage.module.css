@@ -127,6 +127,10 @@
   }
 }
 
+.mapPanel.hide {
+  flex-basis: 0;
+}
+
 .sortBy {
   margin-right: 9px;
 }
@@ -167,4 +171,14 @@
   @media (--viewportLarge) {
     width: 37.5vw;
   }
+}
+
+.mapToggler {
+  min-height: 40px;
+  position: absolute;
+  width: fit-content;
+  padding: 0 20px;
+  right: 10px;
+  z-index: var(--zIndexMapToggler);
+  top: calc(var(--topbarHeightDesktop) + 18px);
 }

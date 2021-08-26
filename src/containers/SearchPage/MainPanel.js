@@ -14,6 +14,7 @@ import {
   SearchFiltersPrimary,
   SearchFiltersSecondary,
   SortBy,
+  Button
 } from '../../components';
 
 import FilterComponent from './FilterComponent';
@@ -229,6 +230,10 @@ class MainPanel extends Component {
 
     return (
       <div className={classes}>
+        <Button className={css.mapToggler} onClick={this.props.onMapTogglerClicked}>
+          {this.props.isMapOpen ? 'Hide Map' : 'Show Map'}
+        </Button>
+
         <SearchFiltersPrimary
           className={css.searchFiltersPrimary}
           sortByComponent={sortBy('desktop')}
