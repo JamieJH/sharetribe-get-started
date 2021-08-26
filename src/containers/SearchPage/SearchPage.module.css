@@ -175,10 +175,14 @@
 
 .mapToggler {
   min-height: 40px;
-  position: absolute;
+  position: fixed;
   width: fit-content;
   padding: 0 20px;
-  right: 10px;
+  right: 36px;
   z-index: var(--zIndexMapToggler);
   top: calc(var(--topbarHeightDesktop) + 18px);
+
+  @media (--viewportLarge) {
+    top: calc(var(--topbarHeightDesktop) + 23px);
+  }
 }

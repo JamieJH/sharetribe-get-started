@@ -169,6 +169,8 @@ class MainPanel extends Component {
       showAsModalMaxWidth,
       filterConfig,
       sortConfig,
+      isMapOpen,
+      onMapTogglerClicked
     } = this.props;
 
     const primaryFilters = filterConfig.filter(f => f.group === 'primary');
@@ -230,8 +232,10 @@ class MainPanel extends Component {
 
     return (
       <div className={classes}>
-        <Button className={css.mapToggler} onClick={this.props.onMapTogglerClicked}>
-          {this.props.isMapOpen ? 'Hide Map' : 'Show Map'}
+        <Button className={css.mapToggler} onClick={onMapTogglerClicked}>
+          {isMapOpen 
+          ? <FormattedMessage id="MainPanel.mapTogglerHide" />
+          : <FormattedMessage id="MainPanel.mapTogglerShow" />}
         </Button>
 
         <SearchFiltersPrimary
@@ -348,6 +352,7 @@ MainPanel.defaultProps = {
   searchParamsForPagination: {},
   filterConfig: config.custom.filters,
   sortConfig: config.custom.sortConfig,
+  isMapOpen: true
 };
 
 MainPanel.propTypes = {
@@ -373,6 +378,7 @@ MainPanel.propTypes = {
   history: shape({
     push: func.isRequired,
   }).isRequired,
+  isMapOpen: bool.isRequired
 };
 
 export default MainPanel;
