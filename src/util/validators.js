@@ -67,6 +67,30 @@ export const maxLength = (message, maximumLength) => value => {
   return hasLength && value.length <= maximumLength ? VALID : message;
 };
 
+// when the number field only has min value restriction (no max)
+export const minNumber = (message, minimumNumber) => value => {
+  if (!minimumNumber) {
+    return VALID;
+  }
+  return value && parseInt(value) >= minimumNumber ? VALID : message;
+}
+
+// when the number field only has max value restriction (no min)
+export const maxNumber = (message, maximumNumber) => value => {
+  if (!maximumNumber) {
+    return VALID;
+  }
+  return value && parseInt(value) <= maximumNumber ? VALID : message;
+}
+
+// when the number field has both min and max values restriction
+export const minAndMaxNumber = (message, minimumNumber, maximumNumber) => value => {
+  if (!minimumNumber && !maximumNumber) {
+    return VALID;
+  }
+  return value && parseInt(value) >= minimumNumber && parseInt(value) <= maximumNumber ? VALID : message;
+}
+
 export const nonEmptyArray = message => value => {
   return value && Array.isArray(value) && value.length > 0 ? VALID : message;
 };

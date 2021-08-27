@@ -25,19 +25,23 @@ const EditListingAvailabilityPanel = props => {
     errors,
   } = props;
 
+
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
+
+  // set default all days are unavailable if listing is equipment
+  const defaultSeatAmount = listing.attributes.publicData.listingType === 'equipment' ? 0 : 1;
   const defaultAvailabilityPlan = {
     type: 'availability-plan/day',
     entries: [
-      { dayOfWeek: 'mon', seats: 1 },
-      { dayOfWeek: 'tue', seats: 1 },
-      { dayOfWeek: 'wed', seats: 1 },
-      { dayOfWeek: 'thu', seats: 1 },
-      { dayOfWeek: 'fri', seats: 1 },
-      { dayOfWeek: 'sat', seats: 1 },
-      { dayOfWeek: 'sun', seats: 1 },
+      { dayOfWeek: 'mon', seats: defaultSeatAmount },
+      { dayOfWeek: 'tue', seats: defaultSeatAmount },
+      { dayOfWeek: 'wed', seats: defaultSeatAmount },
+      { dayOfWeek: 'thu', seats: defaultSeatAmount },
+      { dayOfWeek: 'fri', seats: defaultSeatAmount },
+      { dayOfWeek: 'sat', seats: defaultSeatAmount },
+      { dayOfWeek: 'sun', seats: defaultSeatAmount },
     ],
   };
   const availabilityPlan = currentListing.attributes.availabilityPlan || defaultAvailabilityPlan;

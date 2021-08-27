@@ -63,13 +63,15 @@ class EditListingLocationPanel extends Component {
 
     const isPublished =
       currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
+
+    const formatMessagePanel = listing.attributes.publicData.listingType === 'equipment' ? 'EditEquipmentListingLocationPanel' : 'EditListingLocationPanel';
     const panelTitle = isPublished ? (
       <FormattedMessage
-        id="EditListingLocationPanel.title"
+        id={`${formatMessagePanel}.title`}
         values={{ listingTitle: <ListingLink listing={listing} /> }}
       />
     ) : (
-      <FormattedMessage id="EditListingLocationPanel.createListingTitle" />
+      <FormattedMessage id={`${formatMessagePanel}.createListingTitle`} />
     );
 
     return (

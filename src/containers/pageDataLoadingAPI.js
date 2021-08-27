@@ -28,6 +28,9 @@ const getPageDataLoadingAPI = () => {
     EditListingPage: {
       loadData: EditListingPageLoader,
     },
+    EditEquipmentListingPage: {
+      loadData: ListingPageLoader,
+    },
     EmailVerificationPage: {
       loadData: EmailVerificationPageLoader,
     },
@@ -35,6 +38,9 @@ const getPageDataLoadingAPI = () => {
       loadData: InboxPageLoader,
     },
     ListingPage: {
+      loadData: ListingPageLoader,
+    },
+    EquipmentListingPage: {
       loadData: ListingPageLoader,
     },
     ManageListingsPage: {

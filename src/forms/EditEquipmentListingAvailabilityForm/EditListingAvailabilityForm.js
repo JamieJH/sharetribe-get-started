@@ -33,6 +33,8 @@ export class EditListingAvailabilityFormComponent extends Component {
             availabilityPlan,
             listingId,
           } = formRenderProps;
+
+
           console.log(availability, availabilityPlan)
 
           const errorMessage = updateError ? (

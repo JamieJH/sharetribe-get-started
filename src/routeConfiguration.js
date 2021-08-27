@@ -15,10 +15,12 @@ const AuthenticationPage = loadable(() => import(/* webpackChunkName: "Authentic
 const CheckoutPage = loadable(() => import(/* webpackChunkName: "CheckoutPage" */ './containers/CheckoutPage/CheckoutPage'));
 const ContactDetailsPage = loadable(() => import(/* webpackChunkName: "ContactDetailsPage" */ './containers/ContactDetailsPage/ContactDetailsPage'));
 const EditListingPage = loadable(() => import(/* webpackChunkName: "EditListingPage" */ './containers/EditListingPage/EditListingPage'));
+const EditEquipmentListingPage = loadable(() => import(/* webpackChunkName: "EditListingPage" */ './containers/EditListingPage/EditEquipmentListingPage'));
 const EmailVerificationPage = loadable(() => import(/* webpackChunkName: "EmailVerificationPage" */ './containers/EmailVerificationPage/EmailVerificationPage'));
 const InboxPage = loadable(() => import(/* webpackChunkName: "InboxPage" */ './containers/InboxPage/InboxPage'));
 const LandingPage = loadable(() => import(/* webpackChunkName: "LandingPage" */ './containers/LandingPage/LandingPage'));
 const ListingPage = loadable(() => import(/* webpackChunkName: "ListingPage" */ /* webpackPrefetch: true */ './containers/ListingPage/ListingPage'));
+const EquipmentListingPage = loadable(() => import(/* webpackChunkName: "ListingPage" */ /* webpackPrefetch: true */ './containers/ListingPage/EquipmentListingPage'));
 const ManageListingsPage = loadable(() => import(/* webpackChunkName: "ManageListingsPage" */ './containers/ManageListingsPage/ManageListingsPage'));
 const PasswordChangePage = loadable(() => import(/* webpackChunkName: "PasswordChangePage" */ './containers/PasswordChangePage/PasswordChangePage'));
 const PasswordRecoveryPage = loadable(() => import(/* webpackChunkName: "PasswordRecoveryPage" */ './containers/PasswordRecoveryPage/PasswordRecoveryPage'));
@@ -112,6 +114,17 @@ const routeConfiguration = () => {
       ),
     },
     {
+      path: '/l-equipment/new',
+      name: 'NewEquipmentListingPage',
+      auth: true,
+      component: () => (
+        <NamedRedirect
+          name="EditEquipmentListingPage"
+          params={{ slug: draftSlug, id: draftId, type: 'new', tab: 'general' }}
+        />
+      ),
+    },
+    {
       path: '/l/:slug/:id/:type/:tab',
       name: 'EditListingPage',
       auth: true,
@@ -119,11 +132,25 @@ const routeConfiguration = () => {
       loadData: pageDataLoadingAPI.EditListingPage.loadData,
     },
     {
+      path: '/l-equipment/:slug/:id/:type/:tab',
+      name: 'EditEquipmentListingPage',
+      auth: true,
+      component: EditEquipmentListingPage,
+      loadData: pageDataLoadingAPI.EditEquipmentListingPage.loadData,
+    },
+    {
       path: '/l/:slug/:id/:type/:tab/:returnURLType',
       name: 'EditListingStripeOnboardingPage',
       auth: true,
       component: EditListingPage,
       loadData: pageDataLoadingAPI.EditListingPage.loadData,
+    },
+    {
+      path: '/l-equipment/:slug/:id/:type/:tab/:returnURLType',
+      name: 'EditListingStripeOnboardingPage',
+      auth: true,
+      component: EditEquipmentListingPage,
+      loadData: pageDataLoadingAPI.EditEquipmentListingPage.loadData,
     },
 
     // Canonical path should be after the `/l/new` path since they

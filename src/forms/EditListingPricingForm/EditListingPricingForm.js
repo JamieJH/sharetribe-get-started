@@ -32,7 +32,10 @@ export const EditListingPricingFormComponent = props => (
         fetchErrors,
       } = formRenderProps;
 
-      const unitType = config.bookingUnitType;
+      const { listingType } = props;
+      console.log(listingType)
+      const unitType = listingType === 'equipment' ? config.equipmentBookingUnitType : config.bookingUnitType;
+      // const unitType = config.bookingUnitType;
       const isNightly = unitType === LINE_ITEM_NIGHT;
       const isDaily = unitType === LINE_ITEM_DAY;
 
@@ -115,7 +118,7 @@ export const EditListingPricingFormComponent = props => (
   />
 );
 
-EditListingPricingFormComponent.defaultProps = { fetchErrors: null };
+EditListingPricingFormComponent.defaultProps = { fetchErrors: null, listingType: 'sauna' };
 
 EditListingPricingFormComponent.propTypes = {
   intl: intlShape.isRequired,
@@ -129,6 +132,7 @@ EditListingPricingFormComponent.propTypes = {
     showListingsError: propTypes.error,
     updateListingError: propTypes.error,
   }),
+  listingType: string
 };
 
 export default compose(injectIntl)(EditListingPricingFormComponent);
