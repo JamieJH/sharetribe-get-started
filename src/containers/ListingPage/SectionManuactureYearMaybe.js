@@ -5,27 +5,27 @@ import classNames from 'classnames';
 
 import css from './SectionTextContentMaybe.module.css';
 
-const SectionRulesMaybe = props => {
+const SectionManuactureYearMaybe = props => {
   const { className, rootClassName, publicData } = props;
   const classes = classNames(rootClassName || css.root, className);
-  return publicData && publicData.rules ? (
+  return publicData && publicData.manufactureYear ? (
     <div className={classes}>
       <h2 className={css.title}>
-        <FormattedMessage id="ListingPage.rulesTitle" />
+        <FormattedMessage id="EquipmentListingPage.manufactureYearTitle" />
       </h2>
-      <p className={css.rules}>{publicData.rules}</p>
+      <p className={css.manufactureYear}>{publicData.manufactureYear}</p>
     </div>
   ) : null;
 };
 
-SectionRulesMaybe.defaultProps = { className: null, rootClassName: null };
+SectionManuactureYearMaybe.defaultProps = { className: null, rootClassName: null };
 
-SectionRulesMaybe.propTypes = {
+SectionManuactureYearMaybe.propTypes = {
   className: string,
   rootClassName: string,
   publicData: shape({
-    rules: string,
+    manufactureYear: string,
   }),
 };
 
-export default SectionRulesMaybe;
+export default SectionManuactureYearMaybe;

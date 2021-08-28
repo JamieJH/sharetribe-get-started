@@ -74,6 +74,19 @@ export const filters = [
     config: {},
   },
   {
+    id: 'listingType',
+    label: 'Listing Type',
+    type: 'SelectSingleFilter',
+    group: 'primary',
+    queryParamNames: ['pub_listing_type'],
+    config: {
+      options: [
+        {key: 'sauna', label: 'Saunas'},
+        {key: 'equipment', label: 'Equipment'}
+      ]
+    },
+  },
+  {
     id: 'category',
     label: 'Category',
     type: 'SelectSingleFilter',
@@ -183,6 +196,14 @@ export const equipmentFilters = [
     // NOTE: If you are ordering search results by distance
     // the keyword search can't be used at the same time.
     // You can turn on/off ordering by distance from config.js file.
+    config: {},
+  },
+  {
+    id: 'listingType',
+    label: 'Listing Type',
+    type: 'SelectSingleFilter',
+    group: 'primary',
+    queryParamNames: ['pub_listing_type'],
     config: {},
   },
   {

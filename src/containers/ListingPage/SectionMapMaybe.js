@@ -27,14 +27,16 @@ class SectionMapMaybe extends Component {
     const cacheKey = listingId ? `${listingId.uuid}_${geolocation.lat}_${geolocation.lng}` : null;
 
     const mapProps = config.maps.fuzzy.enabled
-      ? { obfuscatedCenter: obfuscatedCoordinates(geolocation, cacheKey) }
-      : { address, center: geolocation };
+    ? { obfuscatedCenter: obfuscatedCoordinates(geolocation, cacheKey) }
+    : { address, center: geolocation };
     const map = <Map {...mapProps} useStaticMap={this.state.isStatic} />;
 
+    const listingPageName = (publicData && publicData.listingType === 'equipment') ? "EquipmentListingPage" : "ListingPage";
+    
     return (
       <div className={classes}>
         <h2 className={css.locationTitle}>
-          <FormattedMessage id="ListingPage.locationTitle" />
+          <FormattedMessage id={`${listingPageName}.locationTitle`} />
         </h2>
         {this.state.isStatic ? (
           <button

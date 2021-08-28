@@ -51,6 +51,10 @@ import SectionReviews from './SectionReviews';
 import SectionHostMaybe from './SectionHostMaybe';
 import SectionRulesMaybe from './SectionRulesMaybe';
 import SectionMapMaybe from './SectionMapMaybe';
+import SectionTypeMaybe from './SectionTypesMaybe';
+import SectionManuactureYearMaybe from './SectionManuactureYearMaybe';
+import SectionMaxUsesPerDayMaybe from './SectionMaxUsesPerDayMaybe';
+
 import css from './ListingPage.module.css';
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
@@ -174,7 +178,6 @@ export class ListingPageComponent extends Component {
 
   render() {
     const {
-      unitType,
       isAuthenticated,
       currentUser,
       getListing,
@@ -191,7 +194,6 @@ export class ListingPageComponent extends Component {
       sendEnquiryError,
       timeSlots,
       fetchTimeSlotsError,
-      filterConfig,
       onFetchTransactionLineItems,
       lineItems,
       fetchLineItemsInProgress,
@@ -376,15 +378,39 @@ export class ListingPageComponent extends Component {
       </NamedLink>
     );
 
-    const amenityOptions = findOptionsForSelectFilter('amenities', filterConfig);
-    const categoryOptions = findOptionsForSelectFilter('category', filterConfig);
-    const category =
-      publicData && publicData.category ? (
-        <span>
-          {categoryLabel(categoryOptions, publicData.category)}
-          <span className={css.separator}>•</span>
-        </span>
-      ) : null;
+    const unitType = publicData.listingType === 'equipment' ? config.equipmentBookingUnitType : config.bookingUnitType;
+
+    const getCustomSectionsForSpecificListingType = () => {
+      if (publicData.listingType === 'equipment') {
+        const typesOptions = findOptionsForSelectFilter('types', config.custom.equipmentFilters);
+        return <>
+          <SectionTypeMaybe options={typesOptions} publicData={publicData} />
+          <SectionManuactureYearMaybe publicData={publicData} />
+          <SectionMaxUsesPerDayMaybe publicData={publicData} />
+        </>
+      }
+      else {
+        const amenityOptions = findOptionsForSelectFilter('amenities', config.custom.filters);
+        return <>
+          <SectionFeaturesMaybe options={amenityOptions} publicData={publicData} />
+          <SectionRulesMaybe publicData={publicData} />
+        </>
+      }
+    }
+
+    const getListingCategory = () => {
+      if (publicData && publicData.listingType !== 'equipment') {
+        const categoryOptions = findOptionsForSelectFilter('category', config.custom.filters);
+        return publicData && publicData.category ? (
+          <span>
+            {categoryLabel(categoryOptions, publicData.category)}
+            <span className={css.separator}>•</span>
+          </span>
+        ) : null;
+      }
+
+      return '';
+    }
 
     return (
       <Page
@@ -426,17 +452,19 @@ export class ListingPageComponent extends Component {
                 <SectionAvatar user={currentAuthor} params={params} />
                 <div className={css.mainContent}>
                   <SectionHeading
+                    publicData={publicData}
                     priceTitle={priceTitle}
                     formattedPrice={formattedPrice}
                     richTitle={richTitle}
-                    category={category}
+                    category={getListingCategory()}
                     hostLink={hostLink}
                     showContactUser={showContactUser}
                     onContactUser={this.onContactUser}
                   />
-                  <SectionDescriptionMaybe description={description} />
-                  <SectionFeaturesMaybe options={amenityOptions} publicData={publicData} />
-                  <SectionRulesMaybe publicData={publicData} />
+                  <SectionDescriptionMaybe description={description} publicData={publicData} />
+
+                  {getCustomSectionsForSpecificListingType()}
+
                   <SectionMapMaybe
                     geolocation={geolocation}
                     publicData={publicData}
@@ -487,7 +515,6 @@ export class ListingPageComponent extends Component {
 }
 
 ListingPageComponent.defaultProps = {
-  unitType: config.bookingUnitType,
   currentUser: null,
   enquiryModalOpenForListingId: null,
   showListingError: null,
@@ -496,7 +523,7 @@ ListingPageComponent.defaultProps = {
   timeSlots: null,
   fetchTimeSlotsError: null,
   sendEnquiryError: null,
-  filterConfig: config.custom.filters,
+  // filterConfig: config.custom.filters,
   lineItems: null,
   fetchLineItemsError: null,
 };
@@ -510,7 +537,6 @@ ListingPageComponent.propTypes = {
     search: string,
   }).isRequired,
 
-  unitType: propTypes.bookingUnitType,
   // from injectIntl
   intl: intlShape.isRequired,
 
@@ -537,7 +563,7 @@ ListingPageComponent.propTypes = {
   sendEnquiryError: propTypes.error,
   onSendEnquiry: func.isRequired,
   onInitializeCardPaymentData: func.isRequired,
-  filterConfig: array,
+  // filterConfig: array,
   onFetchTransactionLineItems: func.isRequired,
   lineItems: array,
   fetchLineItemsInProgress: bool.isRequired,

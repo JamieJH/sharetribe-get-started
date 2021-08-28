@@ -20,16 +20,29 @@ const SectionHero = props => {
         <h2 className={css.heroSubTitle}>
           <FormattedMessage id="SectionHero.subTitle" />
         </h2>
-        <NamedLink
-          name="SearchPage"
-          to={{
-            search:
-              'address=Finland&bounds=70.0922932%2C31.5870999%2C59.693623%2C20.456500199999937',
-          }}
-          className={css.heroButton}
-        >
-          <FormattedMessage id="SectionHero.browseButton" />
-        </NamedLink>
+        <div className={css.searchButtons}>
+          <NamedLink
+            name="SearchPage"
+            to={{
+              search:
+                'address=Finland&bounds=70.0922932%2C31.5870999%2C59.693623%2C20.456500199999937&pub_listing_type=sauna',
+            }}
+            className={css.heroButton}
+          >
+            <FormattedMessage id="SectionHero.browseButton" />
+          </NamedLink>
+          {/* browse equipment button */}
+          <NamedLink
+            name="SearchPage"
+            to={{
+              search:
+                'address=Ho%20Chi%20Minh%20City&bounds=11.1602136037603%2C107.0265769179448%2C10.34937042531151%2C106.3638783822327&pub_listing_type=equipment',
+            }}
+            className={css.heroButton}
+          >
+            <FormattedMessage id="SectionHero.browseEquipmentButton" />
+          </NamedLink>
+        </div>
       </div>
     </div>
   );
