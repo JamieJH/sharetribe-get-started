@@ -90,7 +90,6 @@ const EditEquipmentListingWizardTab = props => {
     intl,
   } = props;
 
-  // console.log(listing);
 
   const { type } = params;
   const isNewURI = type === LISTING_PAGE_PARAM_TYPE_NEW;
@@ -163,7 +162,6 @@ const EditEquipmentListingWizardTab = props => {
           {...panelProps(GENERAL)}
           submitButtonText={intl.formatMessage({ id: submitButtonTranslationKey })}
           onSubmit={values => {
-            console.log(values)
             onCompleteEditListingWizardTab(tab, values);
           }}
         />

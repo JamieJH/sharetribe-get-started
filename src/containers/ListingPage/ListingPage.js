@@ -443,6 +443,7 @@ export class ListingPageComponent extends Component {
                   type: listingType,
                   tab: listingTab,
                 }}
+                listingType={publicData.listingType}
                 imageCarouselOpen={this.state.imageCarouselOpen}
                 onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
                 handleViewPhotosClick={handleViewPhotosClick}

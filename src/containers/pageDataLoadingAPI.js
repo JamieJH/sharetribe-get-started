@@ -28,9 +28,6 @@ const getPageDataLoadingAPI = () => {
     EditListingPage: {
       loadData: EditListingPageLoader,
     },
-    EditEquipmentListingPage: {
-      loadData: ListingPageLoader,
-    },
     EmailVerificationPage: {
       loadData: EmailVerificationPageLoader,
     },

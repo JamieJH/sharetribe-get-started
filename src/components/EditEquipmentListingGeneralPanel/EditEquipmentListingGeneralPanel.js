@@ -56,7 +56,6 @@ const EditEquipmentListingGeneralPanel = props => {
         }}
         saveActionMsg={submitButtonText}
         onSubmit={values => {
-          console.log(values)
           const { title, description, types, manufactureYear, maxUsesPerDay } = values;
           const updateValues = {
             title: title.trim(),

@@ -15,6 +15,7 @@ const SectionImages = props => {
     imageCarouselOpen,
     onImageCarouselClose,
     onManageDisableScrolling,
+    listingType
   } = props;
 
   const hasImages = listing.images && listing.images.length > 0;
@@ -24,7 +25,7 @@ const SectionImages = props => {
   // to the parent that would otherwise open the image carousel
   const actionBar = listing.id ? (
     <div onClick={e => e.stopPropagation()}>
-      <ActionBarMaybe isOwnListing={isOwnListing} listing={listing} editParams={editParams} />
+      <ActionBarMaybe isOwnListing={isOwnListing} listing={listing} editParams={editParams} listingType={listingType} />
     </div>
   ) : null;
 

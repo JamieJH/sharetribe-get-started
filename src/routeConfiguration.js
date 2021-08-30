@@ -7,6 +7,7 @@ import { NotFoundPage } from './containers';
 // Otherwise, components will import form container eventually and
 // at that point css bundling / imports will happen in wrong order.
 import { NamedRedirect } from './components';
+import config from './config';
 
 const pageDataLoadingAPI = getPageDataLoadingAPI();
 
@@ -15,7 +16,6 @@ const AuthenticationPage = loadable(() => import(/* webpackChunkName: "Authentic
 const CheckoutPage = loadable(() => import(/* webpackChunkName: "CheckoutPage" */ './containers/CheckoutPage/CheckoutPage'));
 const ContactDetailsPage = loadable(() => import(/* webpackChunkName: "ContactDetailsPage" */ './containers/ContactDetailsPage/ContactDetailsPage'));
 const EditListingPage = loadable(() => import(/* webpackChunkName: "EditListingPage" */ './containers/EditListingPage/EditListingPage'));
-const EditEquipmentListingPage = loadable(() => import(/* webpackChunkName: "EditListingPage" */ './containers/EditListingPage/EditEquipmentListingPage'));
 const EmailVerificationPage = loadable(() => import(/* webpackChunkName: "EmailVerificationPage" */ './containers/EmailVerificationPage/EmailVerificationPage'));
 const InboxPage = loadable(() => import(/* webpackChunkName: "InboxPage" */ './containers/InboxPage/InboxPage'));
 const LandingPage = loadable(() => import(/* webpackChunkName: "LandingPage" */ './containers/LandingPage/LandingPage'));
@@ -108,10 +108,11 @@ const routeConfiguration = () => {
       component: () => (
         <NamedRedirect
           name="EditListingPage"
-          params={{ slug: draftSlug, id: draftId, type: 'new', tab: 'description' }}
+          params={{ slug: draftSlug, id: draftId, listingType: 'sauna', type: 'new', tab: config.firstSaunaTab }}
         />
       ),
     },
+
     {
       path: '/l-equipment/new',
       name: 'NewEquipmentListingPage',
@@ -119,7 +120,7 @@ const routeConfiguration = () => {
       component: () => (
         <NamedRedirect
           name="EditEquipmentListingPage"
-          params={{ slug: draftSlug, id: draftId, type: 'new', tab: 'general' }}
+          params={{ slug: draftSlug, id: draftId, listingType: 'equipment', type: 'new', tab: config.firstEquipmentTab }}
         />
       ),
     },
@@ -127,15 +128,19 @@ const routeConfiguration = () => {
       path: '/l/:slug/:id/:type/:tab',
       name: 'EditListingPage',
       auth: true,
-      component: EditListingPage,
+      component: (props) => (
+        <EditListingPage listingType='sauna' {...props} />
+      ),
       loadData: pageDataLoadingAPI.EditListingPage.loadData,
     },
     {
       path: '/l-equipment/:slug/:id/:type/:tab',
       name: 'EditEquipmentListingPage',
       auth: true,
-      component: EditEquipmentListingPage,
-      loadData: pageDataLoadingAPI.EditEquipmentListingPage.loadData,
+      component: (props) => (
+        <EditListingPage listingType='equipment' {...props} />
+      ),
+      loadData: pageDataLoadingAPI.EditListingPage.loadData,
     },
     {
       path: '/l/:slug/:id/:type/:tab/:returnURLType',
@@ -143,13 +148,6 @@ const routeConfiguration = () => {
       auth: true,
       component: EditListingPage,
       loadData: pageDataLoadingAPI.EditListingPage.loadData,
-    },
-    {
-      path: '/l-equipment/:slug/:id/:type/:tab/:returnURLType',
-      name: 'EditListingStripeOnboardingPage',
-      auth: true,
-      component: EditEquipmentListingPage,
-      loadData: pageDataLoadingAPI.EditEquipmentListingPage.loadData,
     },
 
     // Canonical path should be after the `/l/new` path since they

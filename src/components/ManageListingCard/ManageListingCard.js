@@ -136,6 +136,10 @@ export const ManageListingCardComponent = props => {
   const firstImage =
     currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
 
+  const listingType = listing.attributes.publicData.listingType;
+  const firstTab = listingType === 'equipment' ? config.firstEquipmentTab : config.firstSaunaTab;
+  const EditListingPageRouteName = listingType === 'equipment' ? 'EditEquipmentListingPage': 'EditListingPage';
+
   const menuItemClasses = classNames(css.menuItem, {
     [css.menuItemDisabled]: !!actionsInProgressListingId,
   });
@@ -164,7 +168,7 @@ export const ManageListingCardComponent = props => {
     ? LISTING_PAGE_PARAM_TYPE_DRAFT
     : LISTING_PAGE_PARAM_TYPE_EDIT;
 
-  const unitType = config.bookingUnitType;
+  const unitType = listingType === 'equipment' ? config.equipmentBookingUnitType : config.bookingUnitType;
   const isNightly = unitType === LINE_ITEM_NIGHT;
   const isDaily = unitType === LINE_ITEM_DAY;
 
@@ -258,8 +262,8 @@ export const ManageListingCardComponent = props => {
             >
               <NamedLink
                 className={css.finishListingDraftLink}
-                name="EditListingPage"
-                params={{ id, slug, type: LISTING_PAGE_PARAM_TYPE_DRAFT, tab: 'photos' }}
+                name={EditListingPageRouteName}
+                params={{ id, slug, listingType, type: LISTING_PAGE_PARAM_TYPE_DRAFT, tab: 'photos' }}
               >
                 <FormattedMessage id="ManageListingCard.finishListingDraft" />
               </NamedLink>
@@ -341,8 +345,8 @@ export const ManageListingCardComponent = props => {
         <div className={css.manageLinks}>
           <NamedLink
             className={css.manageLink}
-            name="EditListingPage"
-            params={{ id, slug, type: editListingLinkType, tab: 'description' }}
+            name={EditListingPageRouteName}
+            params={{ id, slug, listingType, type: editListingLinkType, tab: firstTab }}
           >
             <FormattedMessage id="ManageListingCard.editListing" />
           </NamedLink>
@@ -353,8 +357,8 @@ export const ManageListingCardComponent = props => {
 
               <NamedLink
                 className={css.manageLink}
-                name="EditListingPage"
-                params={{ id, slug, type: editListingLinkType, tab: 'availability' }}
+                name={EditListingPageRouteName}
+                params={{ id, slug, listingType, type: editListingLinkType, tab: 'availability' }}
               >
                 <FormattedMessage id="ManageListingCard.manageAvailability" />
               </NamedLink>

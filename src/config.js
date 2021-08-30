@@ -47,6 +47,9 @@ const bookingProcessAlias = 'flex-default-process/release-1';
 const bookingUnitType = 'line-item/night';
 const equipmentBookingUnitType = 'line-item/day';
 
+const firstSaunaTab = 'description';
+const firstEquipmentTab = 'general';
+
 // Should the application fetch available time slots (currently defined as
 // start and end dates) to be shown on listing page.
 const enableAvailability = process.env.REACT_APP_AVAILABILITY_ENABLED === 'true';
@@ -232,6 +235,8 @@ const config = {
   usingSSL,
   maps,
   custom,
+  firstSaunaTab,
+  firstEquipmentTab
 };
 
 export default config;

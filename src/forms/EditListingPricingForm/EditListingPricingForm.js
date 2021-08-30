@@ -33,7 +33,6 @@ export const EditListingPricingFormComponent = props => (
       } = formRenderProps;
 
       const { listingType } = props;
-      console.log(listingType)
       const unitType = listingType === 'equipment' ? config.equipmentBookingUnitType : config.bookingUnitType;
       // const unitType = config.bookingUnitType;
       const isNightly = unitType === LINE_ITEM_NIGHT;

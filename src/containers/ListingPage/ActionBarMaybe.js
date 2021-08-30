@@ -1,5 +1,5 @@
 import React from 'react';
-import { bool, oneOfType, object } from 'prop-types';
+import { bool, oneOfType, object, string } from 'prop-types';
 import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import {
@@ -14,7 +14,7 @@ import EditIcon from './EditIcon';
 import css from './ListingPage.module.css';
 
 export const ActionBarMaybe = props => {
-  const { isOwnListing, listing, editParams } = props;
+  const { isOwnListing, listing, editParams, listingType } = props;
   const state = listing.attributes.state;
   const isPendingApproval = state === LISTING_STATE_PENDING_APPROVAL;
   const isClosed = state === LISTING_STATE_CLOSED;
@@ -32,6 +32,7 @@ export const ActionBarMaybe = props => {
     }
 
     const message = isDraft ? 'ListingPage.finishListing' : 'ListingPage.editListing';
+    const routeName = listingType === 'equipment' ? 'EditEquipmentListingPage' : 'EditListingPage';
 
     const ownListingTextClasses = classNames(css.ownListingText, {
       [css.ownListingTextPendingApproval]: isPendingApproval,
@@ -42,7 +43,7 @@ export const ActionBarMaybe = props => {
         <p className={ownListingTextClasses}>
           <FormattedMessage id={ownListingTextTranslationId} />
         </p>
-        <NamedLink className={css.editListingLink} name="EditListingPage" params={editParams}>
+        <NamedLink className={css.editListingLink} name={routeName} params={editParams}>
           <EditIcon className={css.editIcon} />
           <FormattedMessage id={message} />
         </NamedLink>
@@ -64,6 +65,7 @@ ActionBarMaybe.propTypes = {
   isOwnListing: bool.isRequired,
   listing: oneOfType([propTypes.listing, propTypes.ownListing]).isRequired,
   editParams: object.isRequired,
+  listingType: string.isRequired,
 };
 
 ActionBarMaybe.displayName = 'ActionBarMaybe';

@@ -22,7 +22,7 @@ import {
   getStripeConnectAccountLink,
 } from '../../ducks/stripeConnectAccount.duck';
 
-import { EditListingWizard, NamedRedirect, Page } from '../../components';
+import { EditListingWizard, NamedRedirect, Page, EditEquipmentListingWizard } from '../../components';
 import { TopbarContainer } from '../../containers';
 
 import {
@@ -168,6 +168,8 @@ export const EditListingPageComponent = props => {
       ? intl.formatMessage({ id: 'EditListingPage.titleCreateListing' })
       : intl.formatMessage({ id: 'EditListingPage.titleEditListing' });
 
+    const ListingWizardComponent = props.listingType === 'equipment' ? EditEquipmentListingWizard : EditListingWizard;
+
     return (
       <Page title={title} scrollingDisabled={scrollingDisabled}>
         <TopbarContainer
@@ -176,7 +178,7 @@ export const EditListingPageComponent = props => {
           desktopClassName={css.desktopTopbar}
           mobileClassName={css.mobileTopbar}
         />
-        <EditListingWizard
+        <ListingWizardComponent
           id="EditListingWizard"
           className={css.wizard}
           params={params}
@@ -187,6 +189,7 @@ export const EditListingPageComponent = props => {
           history={history}
           images={images}
           listing={currentListing}
+          listingType={props.listingType}
           availability={{
             calendar: page.availabilityCalendar,
             onFetchAvailabilityExceptions,
@@ -246,6 +249,7 @@ EditListingPageComponent.defaultProps = {
   listingDraft: null,
   notificationCount: 0,
   sendVerificationEmailError: null,
+  listingType: 'sauna'
 };
 
 EditListingPageComponent.propTypes = {
@@ -283,6 +287,7 @@ EditListingPageComponent.propTypes = {
   stripeAccountFetched: bool,
   stripeAccount: object,
   scrollingDisabled: bool.isRequired,
+  listingType: string.isRequired,
 
   /* from withRouter */
   history: shape({
