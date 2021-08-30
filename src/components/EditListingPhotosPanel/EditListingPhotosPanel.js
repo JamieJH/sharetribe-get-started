@@ -3,7 +3,7 @@ import { array, bool, func, object, string } from 'prop-types';
 import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { LISTING_STATE_DRAFT } from '../../util/types';
-import { EditListingPhotosForm } from '../../forms';
+import { EditEquipmentListingPhotosForm, EditListingPhotosForm } from '../../forms';
 import { ensureOwnListing } from '../../util/data';
 import { ListingLink } from '../../components';
 
@@ -32,6 +32,7 @@ class EditListingPhotosPanel extends Component {
     const rootClass = rootClassName || css.root;
     const classes = classNames(rootClass, className);
     const currentListing = ensureOwnListing(listing);
+    const FormComponent = listing.attributes.publicData.listingType === 'equipment' ? EditEquipmentListingPhotosForm : EditListingPhotosForm;
 
     const isPublished =
       currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
@@ -47,7 +48,7 @@ class EditListingPhotosPanel extends Component {
     return (
       <div className={classes}>
         <h1 className={css.title}>{panelTitle}</h1>
-        <EditListingPhotosForm
+        <FormComponent
           className={css.form}
           disabled={disabled}
           ready={ready}
