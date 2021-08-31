@@ -108,7 +108,7 @@ const routeConfiguration = () => {
       component: () => (
         <NamedRedirect
           name="EditListingPage"
-          params={{ slug: draftSlug, id: draftId, listingType: 'sauna', type: 'new', tab: config.firstSaunaTab }}
+          params={{ slug: draftSlug, id: draftId, type: 'new', tab: config.firstSaunaTab }}
         />
       ),
     },
@@ -120,7 +120,7 @@ const routeConfiguration = () => {
       component: () => (
         <NamedRedirect
           name="EditEquipmentListingPage"
-          params={{ slug: draftSlug, id: draftId, listingType: 'equipment', type: 'new', tab: config.firstEquipmentTab }}
+          params={{ slug: draftSlug, id: draftId, type: 'new', tab: config.firstEquipmentTab }}
         />
       ),
     },

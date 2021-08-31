@@ -11,10 +11,12 @@ import css from './ValidationError.module.css';
  * shown.
  */
 const ValidationError = props => {
-  const { rootClassName, className, fieldMeta } = props;
+  // The 'touched' attribute of Image uploader inputs are always false, 
+  // so isImageInput will help in those cases  
+  const { rootClassName, className, fieldMeta, isImageInput } = props;
   const { touched, error } = fieldMeta;
   const classes = classNames(rootClassName || css.root, className);
-  return touched && error ? <div className={classes}>{error}</div> : null;
+  return (touched || isImageInput) && error ? <div className={classes}>{error}</div> : null;
 };
 
 ValidationError.defaultProps = { rootClassName: null, className: null };

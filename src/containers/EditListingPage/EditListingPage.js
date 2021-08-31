@@ -24,6 +24,7 @@ import {
 
 import { EditListingWizard, NamedRedirect, Page, EditEquipmentListingWizard } from '../../components';
 import { TopbarContainer } from '../../containers';
+import { LISTING_TYPES } from '../../marketplace-custom-config';
 
 import {
   requestFetchBookings,
@@ -84,6 +85,7 @@ export const EditListingPageComponent = props => {
     stripeAccountFetched,
     stripeAccount,
     updateStripeAccountError,
+    listingType
   } = props;
 
   const { id, type, returnURLType } = params;
@@ -111,20 +113,20 @@ export const EditListingPageComponent = props => {
 
     const redirectProps = isPendingApproval
       ? {
-          name: 'ListingPageVariant',
-          params: {
-            id: listingId.uuid,
-            slug: listingSlug,
-            variant: LISTING_PAGE_PENDING_APPROVAL_VARIANT,
-          },
-        }
+        name: 'ListingPageVariant',
+        params: {
+          id: listingId.uuid,
+          slug: listingSlug,
+          variant: LISTING_PAGE_PENDING_APPROVAL_VARIANT,
+        },
+      }
       : {
-          name: 'ListingPage',
-          params: {
-            id: listingId.uuid,
-            slug: listingSlug,
-          },
-        };
+        name: 'ListingPage',
+        params: {
+          id: listingId.uuid,
+          slug: listingSlug,
+        },
+      };
 
     return <NamedRedirect {...redirectProps} />;
   } else if (showForm) {
@@ -168,7 +170,7 @@ export const EditListingPageComponent = props => {
       ? intl.formatMessage({ id: 'EditListingPage.titleCreateListing' })
       : intl.formatMessage({ id: 'EditListingPage.titleEditListing' });
 
-    const ListingWizardComponent = props.listingType === 'equipment' ? EditEquipmentListingWizard : EditListingWizard;
+    const ListingWizardComponent = listingType === 'equipment' ? EditEquipmentListingWizard : EditListingWizard;
 
     return (
       <Page title={title} scrollingDisabled={scrollingDisabled}>
@@ -287,7 +289,7 @@ EditListingPageComponent.propTypes = {
   stripeAccountFetched: bool,
   stripeAccount: object,
   scrollingDisabled: bool.isRequired,
-  listingType: string.isRequired,
+  listingType: oneOf(LISTING_TYPES).isRequired,
 
   /* from withRouter */
   history: shape({

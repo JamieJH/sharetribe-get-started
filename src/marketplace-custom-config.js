@@ -275,3 +275,5 @@ export const sortConfig = {
     { key: 'relevance', label: 'Relevance', longLabel: 'Relevance (Keyword search)' },
   ],
 };
+
+export const LISTING_TYPES = ['sauna', 'equipment'];

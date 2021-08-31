@@ -1,5 +1,5 @@
 import React from 'react';
-import { bool, oneOfType, object, string } from 'prop-types';
+import { bool, oneOfType, object, oneOf } from 'prop-types';
 import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import {
@@ -10,6 +10,7 @@ import {
 } from '../../util/types';
 import { NamedLink } from '../../components';
 import EditIcon from './EditIcon';
+import { LISTING_TYPES } from '../../marketplace-custom-config';
 
 import css from './ListingPage.module.css';
 
@@ -61,11 +62,14 @@ export const ActionBarMaybe = props => {
   return null;
 };
 
+ActionBarMaybe.defaultProps = {
+  listingType: 'sauna',
+}
 ActionBarMaybe.propTypes = {
   isOwnListing: bool.isRequired,
   listing: oneOfType([propTypes.listing, propTypes.ownListing]).isRequired,
   editParams: object.isRequired,
-  listingType: string.isRequired,
+  listingType: oneOf(LISTING_TYPES).isRequired,
 };
 
 ActionBarMaybe.displayName = 'ActionBarMaybe';

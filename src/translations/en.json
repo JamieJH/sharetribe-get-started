@@ -254,7 +254,7 @@
   "EditEquipmentListingLocationPanel.createListingTitle": "Where can a customer pick up your equipment?",
   "EditEquipmentListingPricingPanel.title": "Edit the pricing of {listingTitle}",
   "EditEquipmentListingPricingPanel.createListingTitle": "How much does it cost to rent the equipment?",
-  "EditEquipmentListingPhotosForm.addImagesTip": "Tip: Choose one main image with the overall look of the equipment, and other images showing it in action",
+  "EditEquipmentListingPhotosForm.addImagesTip": "Tip: Choose one main image with the overall look of the equipment, and other images showing its details or demonstrating it in action.",
   "EditEquipmentListingPhotosForm.chooseImage": "+ Choose an image…",
   "EditEquipmentListingPhotosForm.mainImageTitle": "Upload one main image",
   "EditEquipmentListingPhotosForm.otherImagesTitle": "Upload other related images",
@@ -435,6 +435,7 @@
   "EquipmentListingPage.manufactureYearTitle": "Manufacture Year",
   "EquipmentListingPage.maxUsesPerDayTitle": "Max use times a day",
   "EquipmentListingPage.locationTitle": "Pickup Location",
+  "EquipmentListingPage.otherImagesTitle": "Related Images",
 
   "LoadableComponentErrorBoundaryPage.title": "Page not fetched",
   "LoadableComponentErrorBoundaryPage.heading": "Oops, we couldn't fetch the page.",

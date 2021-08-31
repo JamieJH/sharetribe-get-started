@@ -29,10 +29,41 @@ class EditListingPhotosPanel extends Component {
       onRemoveImage,
     } = this.props;
 
+
     const rootClass = rootClassName || css.root;
     const classes = classNames(rootClass, className);
     const currentListing = ensureOwnListing(listing);
-    const FormComponent = listing.attributes.publicData.listingType === 'equipment' ? EditEquipmentListingPhotosForm : EditListingPhotosForm;
+    const listingType = listing.attributes.publicData.listingType;
+    const FormComponent = listingType === 'equipment' ? EditEquipmentListingPhotosForm : EditListingPhotosForm;
+
+
+    const onSaunaPhotosSubmit = (values) => {
+      const { addImage, ...updateValues } = values;
+      onSubmit(updateValues);
+    }
+
+    const onEquipmentPhotosSubmit = (values) => {
+      const { addMainImage, addOtherImage, ...updateValues } = values;
+      const { mainImage, otherImages } = updateValues;
+      
+      // get uuids from otherImages to store in publicData as an object with 
+      // keys are the uuids and values of true, this helps filtering faster
+      const otherImagesUUIDs = Object.assign(...otherImages.map(image => {
+        const uuid = image.id.uuid || image.imageId.uuid;
+        return { [uuid]: true }
+      }));;
+      const images = [...mainImage, ...otherImages];
+      const finalUpdateValues = {
+        images,
+        publicData: {
+          otherImages: otherImagesUUIDs
+        }
+      }
+
+      onSubmit(finalUpdateValues);
+    }
+
+    const onSubmitHandler = listingType === 'equipment' ? onEquipmentPhotosSubmit : onSaunaPhotosSubmit;
 
     const isPublished =
       currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
@@ -55,11 +86,9 @@ class EditListingPhotosPanel extends Component {
           fetchErrors={errors}
           initialValues={{ images }}
           images={images}
+          initialOtherImagesUUIDs={listing.attributes.publicData.otherImages}
           onImageUpload={onImageUpload}
-          onSubmit={values => {
-            const { addImage, ...updateValues } = values;
-            onSubmit(updateValues);
-          }}
+          onSubmit={onSubmitHandler}
           onChange={onChange}
           onUpdateImageOrder={onUpdateImageOrder}
           onRemoveImage={onRemoveImage}

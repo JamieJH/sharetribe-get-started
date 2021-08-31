@@ -220,6 +220,7 @@ const EditEquipmentListingWizardTab = props => {
           {...panelProps(PHOTOS)}
           submitButtonText={intl.formatMessage({ id: submitButtonTranslationKey })}
           images={images}
+          otherImages={listing.attributes.publicData.otherImages}
           onImageUpload={onImageUpload}
           onRemoveImage={onRemoveImage}
           onSubmit={values => {

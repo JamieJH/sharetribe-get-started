@@ -54,6 +54,7 @@ import SectionMapMaybe from './SectionMapMaybe';
 import SectionTypeMaybe from './SectionTypesMaybe';
 import SectionManuactureYearMaybe from './SectionManuactureYearMaybe';
 import SectionMaxUsesPerDayMaybe from './SectionMaxUsesPerDayMaybe';
+import SectionOtherImagesMaybe from './SectionOtherImagesMaybe';
 
 import css from './ListingPage.module.css';
 
@@ -86,6 +87,7 @@ export class ListingPageComponent extends Component {
     this.state = {
       pageClassNames: [],
       imageCarouselOpen: false,
+      otherImagesCarouselOpen: false,
       enquiryModalOpen: enquiryModalOpenForListingId === params.id,
     };
 
@@ -214,7 +216,6 @@ export class ListingPageComponent extends Component {
     const listingType = isDraftVariant
       ? LISTING_PAGE_PARAM_TYPE_DRAFT
       : LISTING_PAGE_PARAM_TYPE_EDIT;
-    const listingTab = isDraftVariant ? 'photos' : 'description';
 
     const isApproved =
       currentListing.id && currentListing.attributes.state !== LISTING_STATE_PENDING_APPROVAL;
@@ -243,6 +244,10 @@ export class ListingPageComponent extends Component {
       title = '',
       publicData,
     } = currentListing.attributes;
+
+    // the type is either 'sauna' or 'equipment'
+    const publicDataListingType = publicData ? publicData.listingType : 'sauna';
+    const listingTab = isDraftVariant ? 'photos' : (publicDataListingType === 'equipment' ? config.firstEquipmentTab : config.firstSaunaTab);
 
     const richTitle = (
       <span>
@@ -318,6 +323,14 @@ export class ListingPageComponent extends Component {
         imageCarouselOpen: true,
       });
     };
+
+    const handleViewOtherPhotosClick = e => {
+      e.stopPropagation();
+      this.setState({
+        otherImagesCarouselOpen: true,
+      });
+    };
+
     const authorAvailable = currentListing && currentListing.author;
     const userAndListingAuthorAvailable = !!(currentUser && authorAvailable);
     const isOwnListing =
@@ -378,15 +391,23 @@ export class ListingPageComponent extends Component {
       </NamedLink>
     );
 
-    const unitType = publicData.listingType === 'equipment' ? config.equipmentBookingUnitType : config.bookingUnitType;
+    const unitType = (publicDataListingType === 'equipment') ? config.equipmentBookingUnitType : config.bookingUnitType;
+
 
     const getCustomSectionsForSpecificListingType = () => {
-      if (publicData.listingType === 'equipment') {
+      if (publicDataListingType === 'equipment') {
         const typesOptions = findOptionsForSelectFilter('types', config.custom.equipmentFilters);
         return <>
           <SectionTypeMaybe options={typesOptions} publicData={publicData} />
           <SectionManuactureYearMaybe publicData={publicData} />
           <SectionMaxUsesPerDayMaybe publicData={publicData} />
+          <SectionOtherImagesMaybe
+            title={title}
+            listing={currentListing}
+            imageCarouselOpen={this.state.otherImagesCarouselOpen}
+            onImageCarouselClose={() => this.setState({ otherImagesCarouselOpen: false })}
+            handleViewPhotosClick={handleViewOtherPhotosClick}
+            onManageDisableScrolling={onManageDisableScrolling} />
         </>
       }
       else {
@@ -443,7 +464,7 @@ export class ListingPageComponent extends Component {
                   type: listingType,
                   tab: listingTab,
                 }}
-                listingType={publicData.listingType}
+                listingType={publicDataListingType}
                 imageCarouselOpen={this.state.imageCarouselOpen}
                 onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
                 handleViewPhotosClick={handleViewPhotosClick}

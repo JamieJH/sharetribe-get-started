@@ -544,7 +544,10 @@ export function requestImageUpload(actionPayload) {
     dispatch(uploadImage(actionPayload));
     return sdk.images
       .upload({ image: actionPayload.file })
-      .then(resp => dispatch(uploadImageSuccess({ data: { id, imageId: resp.data.data.id } })))
+      .then(resp => {
+        dispatch(uploadImageSuccess({ data: { id, imageId: resp.data.data.id } }));
+        return { data: { id, imageId: resp.data.data.id } };
+      })
       .catch(e => dispatch(uploadImageError({ id, error: storableError(e) })));
   };
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { bool, func, shape, string } from 'prop-types';
+import { bool, func, shape, string, oneOf } from 'prop-types';
 import { compose } from 'redux';
 import { Form as FinalForm } from 'react-final-form';
 import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
@@ -10,6 +10,7 @@ import * as validators from '../../util/validators';
 import { formatMoney } from '../../util/currency';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import { Button, Form, FieldCurrencyInput } from '../../components';
+import { LISTING_TYPES } from '../../marketplace-custom-config';
 import css from './EditListingPricingForm.module.css';
 
 const { Money } = sdkTypes;
@@ -41,8 +42,8 @@ export const EditListingPricingFormComponent = props => (
       const translationKey = isNightly
         ? 'EditListingPricingForm.pricePerNight'
         : isDaily
-        ? 'EditListingPricingForm.pricePerDay'
-        : 'EditListingPricingForm.pricePerUnit';
+          ? 'EditListingPricingForm.pricePerDay'
+          : 'EditListingPricingForm.pricePerUnit';
 
       const pricePerUnitMessage = intl.formatMessage({
         id: translationKey,
@@ -131,7 +132,7 @@ EditListingPricingFormComponent.propTypes = {
     showListingsError: propTypes.error,
     updateListingError: propTypes.error,
   }),
-  listingType: string
+  listingType: oneOf(LISTING_TYPES).isRequired
 };
 
 export default compose(injectIntl)(EditListingPricingFormComponent);

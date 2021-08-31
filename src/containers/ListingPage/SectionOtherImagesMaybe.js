@@ -1,60 +1,57 @@
 import React from 'react';
 import { FormattedMessage } from '../../util/reactIntl';
 import { ResponsiveImage, Modal, ImageCarousel } from '../../components';
-import ActionBarMaybe from './ActionBarMaybe';
 
 import css from './ListingPage.module.css';
+import cssText from './SectionTextContentMaybe.module.css';
 
-const SectionImages = props => {
+const SectionOtherImagesMaybe = props => {
   const {
     title,
     listing,
-    isOwnListing,
-    editParams,
     handleViewPhotosClick,
     imageCarouselOpen,
     onImageCarouselClose,
     onManageDisableScrolling,
-    listingType
   } = props;
 
-  const hasImages = listing.images && listing.images.length > 0;
-  let finalImages = listing.images;
-  let firstImage = null;
 
-  if (hasImages) {
-    const otherImagesUUIDs = listing.attributes.publicData.otherImages;
-    if (listingType === 'equipment' && otherImagesUUIDs) {
-      firstImage = listing.images.find(image => !otherImagesUUIDs[image.id.uuid]);
-      finalImages = [firstImage];
-    }
-    else {
-      firstImage = finalImages[0];
-    }
+  const otherImagesUUIDs = listing.attributes && listing.attributes.publicData.otherImages;
+  let hasOtherImages = otherImagesUUIDs && Object.keys(otherImagesUUIDs).length > 0;
+  // there are no other images
+  if (!hasOtherImages) {
+    return '';
   }
+  
+  const hasImages = listing.images && listing.images && listing.images.length > 0;
 
-  // Action bar is wrapped with a div that prevents the click events
-  // to the parent that would otherwise open the image carousel
-  const actionBar = listing.id ? (
-    <div onClick={e => e.stopPropagation()}>
-      <ActionBarMaybe isOwnListing={isOwnListing} listing={listing} editParams={editParams} listingType={listingType} />
-    </div>
-  ) : null;
+  let otherImages = null;
 
-  const viewPhotosButton = (hasImages && listingType !== 'equipment') ? (
+  // filter and get all other images
+  if (hasImages && hasOtherImages) {
+    otherImages = listing.images.filter(image => {
+      return listing.attributes.publicData.otherImages[image.id.uuid];
+    })
+  }
+  const firstImage = otherImages ? otherImages[0] : null;
+
+  const viewPhotosButton = hasImages ? (
     <button className={css.viewPhotos} onClick={handleViewPhotosClick}>
       <FormattedMessage
         id="ListingPage.viewImagesButton"
-        values={{ count: listing.images.length }}
+        values={{ count: otherImages.length }}
       />
     </button>
   ) : null;
 
   return (
-    <div className={css.sectionImages}>
-      <div className={css.threeToTwoWrapper}>
+    <div className={cssText.root}>
+      <h2 className={css.featuresTitle}>
+        <FormattedMessage id="EquipmentListingPage.otherImagesTitle" />
+      </h2>
+
+      {/* <div className={css.threeToTwoWrapper}> */}
         <div className={css.aspectWrapper} onClick={handleViewPhotosClick}>
-          {actionBar}
           <ResponsiveImage
             rootClassName={css.rootForImage}
             alt={title}
@@ -68,9 +65,9 @@ const SectionImages = props => {
           />
           {viewPhotosButton}
         </div>
-      </div>
+      {/* </div> */}
       <Modal
-        id="ListingPage.imageCarousel"
+        id="ListingPage.otherImageCarousel"
         scrollLayerClassName={css.carouselModalScrollLayer}
         containerClassName={css.carouselModalContainer}
         lightCloseButton
@@ -79,10 +76,10 @@ const SectionImages = props => {
         usePortal
         onManageDisableScrolling={onManageDisableScrolling}
       >
-        <ImageCarousel images={finalImages} />
+        <ImageCarousel images={otherImages} />
       </Modal>
     </div>
   );
 };
 
-export default SectionImages;
+export default SectionOtherImagesMaybe;
