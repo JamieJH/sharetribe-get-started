@@ -25,7 +25,7 @@ const SectionHero = props => {
             name="SearchPage"
             to={{
               search:
-                'address=Finland&bounds=70.0922932%2C31.5870999%2C59.693623%2C20.456500199999937&pub_listing_type=sauna',
+                'address=Finland&bounds=70.0922932%2C31.5870999%2C59.693623%2C20.456500199999937&pub_listingType=sauna',
             }}
             className={css.heroButton}
           >
@@ -36,7 +36,7 @@ const SectionHero = props => {
             name="SearchPage"
             to={{
               search:
-                'address=Ho%20Chi%20Minh%20City&bounds=11.1602136037603%2C107.0265769179448%2C10.34937042531151%2C106.3638783822327&pub_listing_type=equipment',
+                'address=Ho%20Chi%20Minh%20City&bounds=11.1602136037603%2C107.0265769179448%2C10.34937042531151%2C106.3638783822327&pub_listingType=equipment',
             }}
             className={css.heroButton}
           >

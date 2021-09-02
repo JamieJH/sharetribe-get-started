@@ -1,5 +1,5 @@
 import React from 'react';
-import { shape, string } from 'prop-types';
+import { shape, string, number } from 'prop-types';
 import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 
@@ -24,7 +24,7 @@ SectionMaxUsesPerDayMaybe.propTypes = {
   className: string,
   rootClassName: string,
   publicData: shape({
-    maxUsesPerDay: string,
+    maxUsesPerDay: number,
   }),
 };
 
