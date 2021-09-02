@@ -45,21 +45,25 @@ class EditListingPhotosPanel extends Component {
     const onEquipmentPhotosSubmit = (values) => {
       const { addMainImage, addOtherImage, ...updateValues } = values;
       const { mainImage, otherImages } = updateValues;
-      
-      // get uuids from otherImages to store in publicData as an object with 
-      // keys are the uuids and values of true, this helps filtering faster
-      const otherImagesUUIDs = Object.assign(...otherImages.map(image => {
-        const uuid = image.id.uuid || image.imageId.uuid;
-        return { [uuid]: true }
-      }));;
-      const images = [...mainImage, ...otherImages];
-      const finalUpdateValues = {
-        images,
-        publicData: {
+      let images = [...mainImage];
+      const finalUpdateValues = {};
+
+      console.log(otherImages);
+
+      if (otherImages.length > 0) {
+        // get uuids from otherImages to store in publicData as an object with 
+        // keys are the uuids and values of true, this helps filtering faster
+        const otherImagesUUIDs = Object.assign(...otherImages.map(image => {
+          const uuid = image.id.uuid || image.imageId.uuid;
+          return { [uuid]: true }
+        }));;
+        images = images.concat(otherImages);
+        finalUpdateValues.publicData = {
           otherImages: otherImagesUUIDs
         }
       }
 
+      finalUpdateValues.images = images;
       onSubmit(finalUpdateValues);
     }
 
