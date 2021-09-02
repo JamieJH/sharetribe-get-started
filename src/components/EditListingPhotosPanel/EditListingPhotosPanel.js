@@ -48,8 +48,6 @@ class EditListingPhotosPanel extends Component {
       let images = [...mainImage];
       const finalUpdateValues = {};
 
-      console.log(otherImages);
-
       if (otherImages.length > 0) {
         // get uuids from otherImages to store in publicData as an object with 
         // keys are the uuids and values of true, this helps filtering faster
