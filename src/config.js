@@ -45,6 +45,10 @@ const bookingProcessAlias = 'flex-default-process/release-1';
 // Note 2: Translations will use different translation keys for night, day or unit
 //         depending on the value chosen.
 const bookingUnitType = 'line-item/night';
+const equipmentBookingUnitType = 'line-item/day';
+
+const firstSaunaTab = 'description';
+const firstEquipmentTab = 'general';
 
 // Should the application fetch available time slots (currently defined as
 // start and end dates) to be shown on listing page.
@@ -197,6 +201,7 @@ const config = {
   locale,
   bookingProcessAlias,
   bookingUnitType,
+  equipmentBookingUnitType,
   enableAvailability,
   dayCountAvailableForBooking,
   i18n,
@@ -230,6 +235,8 @@ const config = {
   usingSSL,
   maps,
   custom,
+  firstSaunaTab,
+  firstEquipmentTab
 };
 
 export default config;

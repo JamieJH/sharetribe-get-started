@@ -74,6 +74,19 @@ export const filters = [
     config: {},
   },
   {
+    id: 'listingType',
+    label: 'Listing Type',
+    type: 'SelectSingleFilter',
+    group: 'primary',
+    queryParamNames: ['pub_listing_type'],
+    config: {
+      options: [
+        {key: 'sauna', label: 'Saunas'},
+        {key: 'equipment', label: 'Equipment'}
+      ]
+    },
+  },
+  {
     id: 'category',
     label: 'Category',
     type: 'SelectSingleFilter',
@@ -145,6 +158,96 @@ export const filters = [
   },
 ];
 
+export const equipmentFilters = [
+  {
+    id: 'dates',
+    label: 'Dates',
+    type: 'BookingDateRangeFilter',
+    group: 'primary',
+    // Note: BookingDateRangeFilter is fixed filter,
+    // you can't change "queryParamNames: ['dates'],"
+    queryParamNames: ['dates'],
+    config: {},
+  },
+  {
+    id: 'price',
+    label: 'Price',
+    type: 'PriceFilter',
+    group: 'primary',
+    // Note: PriceFilter is fixed filter,
+    // you can't change "queryParamNames: ['price'],"
+    queryParamNames: ['price'],
+    // Price filter configuration
+    // Note: unlike most prices this is not handled in subunits
+    config: {
+      min: 0,
+      max: 1000,
+      step: 5,
+    },
+  },
+  {
+    id: 'keyword',
+    label: 'Keyword',
+    type: 'KeywordFilter',
+    group: 'primary',
+    // Note: KeywordFilter is fixed filter,
+    // you can't change "queryParamNames: ['keywords'],"
+    queryParamNames: ['keywords'],
+    // NOTE: If you are ordering search results by distance
+    // the keyword search can't be used at the same time.
+    // You can turn on/off ordering by distance from config.js file.
+    config: {},
+  },
+  {
+    id: 'listingType',
+    label: 'Listing Type',
+    type: 'SelectSingleFilter',
+    group: 'primary',
+    queryParamNames: ['pub_listing_type'],
+    config: {},
+  },
+  {
+    id: 'types',
+    label: 'Types',
+    type: 'SelectMultipleFilter',
+    group: 'secondary',
+    queryParamNames: ['pub_types'],
+    config: {
+      options: [
+        { key: 'physics', label: 'Physics' },
+        { key: 'math', label: 'Math' },
+        { key: 'chemistry', label: 'Chemistry' },
+        { key: 'other', label: 'Other' },
+      ],
+    },
+  },
+  {
+    id: 'manufacture-year',
+    label: 'Manufacture year',
+    type: 'SelectSingleFilter',
+    group: 'secondary',
+    queryParamNames: ['pub_manufacture_year'],
+    config: {
+      min: 2000,
+      max: new Date().getFullYear().toString(),
+      step: 1,
+    },
+  },
+  {
+    id: 'max-uses-per-day',
+    label: 'Max uses a day',
+    type: 'SelectSingleFilter',
+    group: 'secondary',
+    queryParamNames: ['pub_max_uses_per_day'],
+    config: {
+      min: 1,
+      max: 100,
+      step: 1,
+    },
+  },
+];
+
+
 export const sortConfig = {
   // Enable/disable the sorting control in the SearchPage
   active: true,
@@ -172,3 +275,5 @@ export const sortConfig = {
     { key: 'relevance', label: 'Relevance', longLabel: 'Relevance (Keyword search)' },
   ],
 };
+
+export const LISTING_TYPES = ['sauna', 'equipment'];

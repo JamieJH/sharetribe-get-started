@@ -41,3 +41,15 @@ export const findOptionsForSelectFilter = (filterId, filters) => {
   const filter = filters.find(f => f.id === filterId);
   return filter && filter.config && filter.config.options ? filter.config.options : [];
 };
+
+
+export const findMinMaxRangeAndStepForNumberFilter = (filterId, filters) => {
+  const filter = filters.find(f => f.id === filterId);
+  return (filter && filter.config)
+    ? {
+      min: filter.config.min,
+      max: filter.config.max,
+      step: filter.config.step
+    }
+    : {}
+};

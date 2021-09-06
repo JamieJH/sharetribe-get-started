@@ -37,6 +37,9 @@ const getPageDataLoadingAPI = () => {
     ListingPage: {
       loadData: ListingPageLoader,
     },
+    EquipmentListingPage: {
+      loadData: ListingPageLoader,
+    },
     ManageListingsPage: {
       loadData: ManageListingsPageLoader,
     },

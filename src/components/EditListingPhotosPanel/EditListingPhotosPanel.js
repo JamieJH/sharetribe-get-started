@@ -3,7 +3,7 @@ import { array, bool, func, object, string } from 'prop-types';
 import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { LISTING_STATE_DRAFT } from '../../util/types';
-import { EditListingPhotosForm } from '../../forms';
+import { EditEquipmentListingPhotosForm, EditListingPhotosForm } from '../../forms';
 import { ensureOwnListing } from '../../util/data';
 import { ListingLink } from '../../components';
 
@@ -29,9 +29,43 @@ class EditListingPhotosPanel extends Component {
       onRemoveImage,
     } = this.props;
 
+
     const rootClass = rootClassName || css.root;
     const classes = classNames(rootClass, className);
     const currentListing = ensureOwnListing(listing);
+    const listingType = listing.attributes.publicData.listingType;
+    const FormComponent = listingType === 'equipment' ? EditEquipmentListingPhotosForm : EditListingPhotosForm;
+
+
+    const onSaunaPhotosSubmit = (values) => {
+      const { addImage, ...updateValues } = values;
+      onSubmit(updateValues);
+    }
+
+    const onEquipmentPhotosSubmit = (values) => {
+      const { addMainImage, addOtherImage, ...updateValues } = values;
+      const { mainImage, otherImages } = updateValues;
+      let images = [...mainImage];
+      const finalUpdateValues = {};
+
+      if (otherImages.length > 0) {
+        // get uuids from otherImages to store in publicData as an object with 
+        // keys are the uuids and values of true, this helps filtering faster
+        const otherImagesUUIDs = Object.assign(...otherImages.map(image => {
+          const uuid = image.id.uuid || image.imageId.uuid;
+          return { [uuid]: true }
+        }));;
+        images = images.concat(otherImages);
+        finalUpdateValues.publicData = {
+          otherImages: otherImagesUUIDs
+        }
+      }
+
+      finalUpdateValues.images = images;
+      onSubmit(finalUpdateValues);
+    }
+
+    const onSubmitHandler = listingType === 'equipment' ? onEquipmentPhotosSubmit : onSaunaPhotosSubmit;
 
     const isPublished =
       currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
@@ -47,18 +81,16 @@ class EditListingPhotosPanel extends Component {
     return (
       <div className={classes}>
         <h1 className={css.title}>{panelTitle}</h1>
-        <EditListingPhotosForm
+        <FormComponent
           className={css.form}
           disabled={disabled}
           ready={ready}
           fetchErrors={errors}
           initialValues={{ images }}
           images={images}
+          initialOtherImagesUUIDs={listing.attributes.publicData.otherImages}
           onImageUpload={onImageUpload}
-          onSubmit={values => {
-            const { addImage, ...updateValues } = values;
-            onSubmit(updateValues);
-          }}
+          onSubmit={onSubmitHandler}
           onChange={onChange}
           onUpdateImageOrder={onUpdateImageOrder}
           onRemoveImage={onRemoveImage}

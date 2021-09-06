@@ -9,9 +9,15 @@
   flex-shrink: 0;
 }
 
+.photosTitle {
+  margin-top: 20px;
+  margin-bottom: 0;
+  font-size: 16px;
+}
+
 .imagesField {
   flex-shrink: 0;
-  margin: 0;
+  margin: 0 0 20px 0;
 }
 
 .thumbnail {

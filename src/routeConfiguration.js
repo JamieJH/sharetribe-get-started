@@ -7,6 +7,7 @@ import { NotFoundPage } from './containers';
 // Otherwise, components will import form container eventually and
 // at that point css bundling / imports will happen in wrong order.
 import { NamedRedirect } from './components';
+import config from './config';
 
 const pageDataLoadingAPI = getPageDataLoadingAPI();
 
@@ -107,7 +108,19 @@ const routeConfiguration = () => {
       component: () => (
         <NamedRedirect
           name="EditListingPage"
-          params={{ slug: draftSlug, id: draftId, type: 'new', tab: 'description' }}
+          params={{ slug: draftSlug, id: draftId, type: 'new', tab: config.firstSaunaTab }}
+        />
+      ),
+    },
+
+    {
+      path: '/l-equipment/new',
+      name: 'NewEquipmentListingPage',
+      auth: true,
+      component: () => (
+        <NamedRedirect
+          name="EditEquipmentListingPage"
+          params={{ slug: draftSlug, id: draftId, type: 'new', tab: config.firstEquipmentTab }}
         />
       ),
     },
@@ -115,7 +128,18 @@ const routeConfiguration = () => {
       path: '/l/:slug/:id/:type/:tab',
       name: 'EditListingPage',
       auth: true,
-      component: EditListingPage,
+      component: (props) => (
+        <EditListingPage listingType='sauna' {...props} />
+      ),
+      loadData: pageDataLoadingAPI.EditListingPage.loadData,
+    },
+    {
+      path: '/l-equipment/:slug/:id/:type/:tab',
+      name: 'EditEquipmentListingPage',
+      auth: true,
+      component: (props) => (
+        <EditListingPage listingType='equipment' {...props} />
+      ),
       loadData: pageDataLoadingAPI.EditListingPage.loadData,
     },
     {

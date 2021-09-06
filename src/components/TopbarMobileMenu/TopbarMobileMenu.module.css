@@ -28,6 +28,10 @@
   box-shadow: var(--boxShadowTop);
 }
 
+.footer > *:first-child {
+  margin-bottom: 10px;
+}
+
 .avatar {
   /* Layout */
   flex-shrink: 0;

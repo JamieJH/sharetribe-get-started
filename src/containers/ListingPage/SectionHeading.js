@@ -15,9 +15,10 @@ const SectionHeading = props => {
     hostLink,
     showContactUser,
     onContactUser,
+    publicData
   } = props;
 
-  const unitType = config.bookingUnitType;
+  const unitType = (publicData && publicData.listingType === 'equipment') ? config.equipmentBookingUnitType : config.bookingUnitType;
   const isNightly = unitType === LINE_ITEM_NIGHT;
   const isDaily = unitType === LINE_ITEM_DAY;
 

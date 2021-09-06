@@ -66,7 +66,7 @@ const ThumbnailWrapper = props => {
 
 ThumbnailWrapper.defaultProps = { className: null };
 
-const { array, func, node, string, object } = PropTypes;
+const { array, func, node, string, object, oneOfType, element } = PropTypes;
 
 ThumbnailWrapper.propTypes = {
   className: string,
@@ -108,7 +108,7 @@ AddImages.defaultProps = { className: null, thumbnailClassName: null, images: []
 
 AddImages.propTypes = {
   images: array,
-  children: node.isRequired,
+  children: oneOfType([node, element]).isRequired,
   className: string,
   thumbnailClassName: string,
   savedImageAltText: string.isRequired,

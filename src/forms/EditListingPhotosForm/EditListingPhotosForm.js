@@ -102,7 +102,7 @@ export class EditListingPhotosFormComponent extends Component {
           // Create and show listing errors are shown above submit button
           const publishListingFailed = publishListingError ? (
             <p className={css.error}>
-              <FormattedMessage id="EditListingPhotosForm.publishListingFailed" />
+              <FormattedMessage id="EditListingPhotosForm.publishListingFailed" params={{ listingType: 'Sauna' }} />
             </p>
           ) : null;
           const showListingFailed = showListingsError ? (

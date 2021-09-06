@@ -22,8 +22,9 @@ import {
   getStripeConnectAccountLink,
 } from '../../ducks/stripeConnectAccount.duck';
 
-import { EditListingWizard, NamedRedirect, Page } from '../../components';
+import { EditListingWizard, NamedRedirect, Page, EditEquipmentListingWizard } from '../../components';
 import { TopbarContainer } from '../../containers';
+import { LISTING_TYPES } from '../../marketplace-custom-config';
 
 import {
   requestFetchBookings,
@@ -84,6 +85,7 @@ export const EditListingPageComponent = props => {
     stripeAccountFetched,
     stripeAccount,
     updateStripeAccountError,
+    listingType
   } = props;
 
   const { id, type, returnURLType } = params;
@@ -111,20 +113,20 @@ export const EditListingPageComponent = props => {
 
     const redirectProps = isPendingApproval
       ? {
-          name: 'ListingPageVariant',
-          params: {
-            id: listingId.uuid,
-            slug: listingSlug,
-            variant: LISTING_PAGE_PENDING_APPROVAL_VARIANT,
-          },
-        }
+        name: 'ListingPageVariant',
+        params: {
+          id: listingId.uuid,
+          slug: listingSlug,
+          variant: LISTING_PAGE_PENDING_APPROVAL_VARIANT,
+        },
+      }
       : {
-          name: 'ListingPage',
-          params: {
-            id: listingId.uuid,
-            slug: listingSlug,
-          },
-        };
+        name: 'ListingPage',
+        params: {
+          id: listingId.uuid,
+          slug: listingSlug,
+        },
+      };
 
     return <NamedRedirect {...redirectProps} />;
   } else if (showForm) {
@@ -168,6 +170,8 @@ export const EditListingPageComponent = props => {
       ? intl.formatMessage({ id: 'EditListingPage.titleCreateListing' })
       : intl.formatMessage({ id: 'EditListingPage.titleEditListing' });
 
+    const ListingWizardComponent = listingType === 'equipment' ? EditEquipmentListingWizard : EditListingWizard;
+
     return (
       <Page title={title} scrollingDisabled={scrollingDisabled}>
         <TopbarContainer
@@ -176,7 +180,7 @@ export const EditListingPageComponent = props => {
           desktopClassName={css.desktopTopbar}
           mobileClassName={css.mobileTopbar}
         />
-        <EditListingWizard
+        <ListingWizardComponent
           id="EditListingWizard"
           className={css.wizard}
           params={params}
@@ -187,6 +191,7 @@ export const EditListingPageComponent = props => {
           history={history}
           images={images}
           listing={currentListing}
+          listingType={props.listingType}
           availability={{
             calendar: page.availabilityCalendar,
             onFetchAvailabilityExceptions,
@@ -246,6 +251,7 @@ EditListingPageComponent.defaultProps = {
   listingDraft: null,
   notificationCount: 0,
   sendVerificationEmailError: null,
+  listingType: 'sauna'
 };
 
 EditListingPageComponent.propTypes = {
@@ -283,6 +289,7 @@ EditListingPageComponent.propTypes = {
   stripeAccountFetched: bool,
   stripeAccount: object,
   scrollingDisabled: bool.isRequired,
+  listingType: oneOf(LISTING_TYPES).isRequired,
 
   /* from withRouter */
   history: shape({

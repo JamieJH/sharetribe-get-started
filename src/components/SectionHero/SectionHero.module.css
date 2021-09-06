@@ -96,3 +96,21 @@
     width: 260px;
   }
 }
+
+.searchButtons {
+  display: flex;
+  flex-flow: column;
+
+  @media (--viewportMedium) {
+    flex-flow: row;
+  }
+}
+
+.searchButtons > *:first-child {
+  margin-bottom: 20px;
+  
+  @media (--viewportMedium) {
+    margin-bottom: 0;
+    margin-right: 30px;
+  }
+}

@@ -5,27 +5,27 @@ import classNames from 'classnames';
 
 import css from './SectionTextContentMaybe.module.css';
 
-const SectionRulesMaybe = props => {
+const SectionMaxUsesPerDayMaybe = props => {
   const { className, rootClassName, publicData } = props;
   const classes = classNames(rootClassName || css.root, className);
-  return publicData && publicData.rules ? (
+  return publicData && publicData.maxUsesPerDay ? (
     <div className={classes}>
       <h2 className={css.title}>
-        <FormattedMessage id="ListingPage.rulesTitle" />
+        <FormattedMessage id="EquipmentListingPage.maxUsesPerDayTitle" />
       </h2>
-      <p className={css.rules}>{publicData.rules}</p>
+      <p className={css.maxUsesPerDay}>{publicData.maxUsesPerDay}</p>
     </div>
   ) : null;
 };
 
-SectionRulesMaybe.defaultProps = { className: null, rootClassName: null };
+SectionMaxUsesPerDayMaybe.defaultProps = { className: null, rootClassName: null };
 
-SectionRulesMaybe.propTypes = {
+SectionMaxUsesPerDayMaybe.propTypes = {
   className: string,
   rootClassName: string,
   publicData: shape({
-    rules: string,
+    maxUsesPerDay: string,
   }),
 };
 
-export default SectionRulesMaybe;
+export default SectionMaxUsesPerDayMaybe;

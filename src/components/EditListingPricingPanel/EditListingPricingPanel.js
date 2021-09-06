@@ -33,13 +33,15 @@ const EditListingPricingPanel = props => {
   const { price } = currentListing.attributes;
 
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
+  const formatMessagePanel = listing.attributes.publicData.listingType === 'equipment' ? 'EditEquipmentListingLocationPanel' : 'EditListingLocationPanel';
+
   const panelTitle = isPublished ? (
     <FormattedMessage
-      id="EditListingPricingPanel.title"
+      id={`${formatMessagePanel}.title`}
       values={{ listingTitle: <ListingLink listing={listing} /> }}
     />
   ) : (
-    <FormattedMessage id="EditListingPricingPanel.createListingTitle" />
+    <FormattedMessage id={`${formatMessagePanel}.createListingTitle`} />
   );
 
   const priceCurrencyValid = price instanceof Money ? price.currency === config.currency : true;
@@ -55,6 +57,7 @@ const EditListingPricingPanel = props => {
       updated={panelUpdated}
       updateInProgress={updateInProgress}
       fetchErrors={errors}
+      listingType={listing.attributes.publicData.listingType}
     />
   ) : (
     <div className={css.priceCurrencyInvalid}>
