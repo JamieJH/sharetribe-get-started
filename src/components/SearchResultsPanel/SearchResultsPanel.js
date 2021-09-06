@@ -1,12 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { bool } from 'prop-types';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
 import { ListingCard, PaginationLinks } from '../../components';
 import css from './SearchResultsPanel.module.css';
 
 const SearchResultsPanel = props => {
-  const { className, rootClassName, listings, pagination, search, setActiveListing } = props;
+  const { className, rootClassName, listings, pagination, search, setActiveListing, isMapOpen } = props;
   const classes = classNames(rootClassName || css.root, className);
 
   const paginationLinks =
@@ -31,10 +31,10 @@ const SearchResultsPanel = props => {
 
   return (
     <div className={classes}>
-      <div className={css.listingCards}>
+      <div className={classNames(css.listingCards, { [css.listingCardsContainerMapHiddenDesktop]: !isMapOpen })}>
         {listings.map(l => (
           <ListingCard
-            className={css.listingCard}
+            className={classNames(css.listingCard, { [css.listingCardMapHiddenDesktop]: !isMapOpen })}
             key={l.id.uuid}
             listing={l}
             renderSizes={cardRenderSizes}
@@ -55,6 +55,7 @@ SearchResultsPanel.defaultProps = {
   pagination: null,
   rootClassName: null,
   search: null,
+  isMapOpen: true,
 };
 
 const { array, node, object, string } = PropTypes;
@@ -66,6 +67,7 @@ SearchResultsPanel.propTypes = {
   pagination: propTypes.pagination,
   rootClassName: string,
   search: object,
+  isMapOpen: bool.isRequired
 };
 
 export default SearchResultsPanel;

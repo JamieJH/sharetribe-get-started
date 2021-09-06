@@ -335,6 +335,7 @@ class MainPanel extends Component {
               pagination={listingsAreLoaded ? pagination : null}
               search={searchParamsForPagination}
               setActiveListing={onActivateListing}
+              isMapOpen={isMapOpen}
             />
           </div>
         )}
