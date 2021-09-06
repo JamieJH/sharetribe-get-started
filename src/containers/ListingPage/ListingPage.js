@@ -396,7 +396,7 @@ export class ListingPageComponent extends Component {
 
     const getCustomSectionsForSpecificListingType = () => {
       if (publicDataListingType === 'equipment') {
-        const typesOptions = findOptionsForSelectFilter('types', config.custom.equipmentFilters);
+        const typesOptions = findOptionsForSelectFilter('types', config.custom.filters);
         return <>
           <SectionTypeMaybe options={typesOptions} publicData={publicData} />
           <SectionManuactureYearMaybe publicData={publicData} />
@@ -545,7 +545,6 @@ ListingPageComponent.defaultProps = {
   timeSlots: null,
   fetchTimeSlotsError: null,
   sendEnquiryError: null,
-  // filterConfig: config.custom.filters,
   lineItems: null,
   fetchLineItemsError: null,
 };
@@ -585,7 +584,6 @@ ListingPageComponent.propTypes = {
   sendEnquiryError: propTypes.error,
   onSendEnquiry: func.isRequired,
   onInitializeCardPaymentData: func.isRequired,
-  // filterConfig: array,
   onFetchTransactionLineItems: func.isRequired,
   lineItems: array,
   fetchLineItemsInProgress: bool.isRequired,

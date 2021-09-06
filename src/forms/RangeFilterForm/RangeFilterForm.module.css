@@ -81,7 +81,7 @@
   }
 }
 
-.minPrice {
+.minRange {
   @apply --marketplaceSearchFilterSublabelFontStyles;
   width: 48px;
   text-align: center;
@@ -99,7 +99,7 @@
     padding: 1px 0 4px 0;
   }
 }
-.maxPrice {
+.maxRange {
   @apply --marketplaceSearchFilterSublabelFontStyles;
   width: 48px;
   text-align: center;
@@ -118,12 +118,12 @@
   }
 }
 
-.priceSeparator {
+.rangeSeparator {
   margin: 4px 8px 0 8px;
 }
 
 @media (--viewportMedium) {
-  .priceSeparator {
+  .rangeSeparator {
     margin: 2px 8px 0 8px;
   }
 }

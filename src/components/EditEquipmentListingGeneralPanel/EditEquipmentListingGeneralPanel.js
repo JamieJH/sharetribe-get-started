@@ -40,7 +40,7 @@ const EditEquipmentListingGeneralPanel = props => {
     <FormattedMessage id="EditEquipmentListingGeneralPanel.createListingTitle" />
   );
 
-  const typeOptions = findOptionsForSelectFilter('types', config.custom.equipmentFilters);
+  const typeOptions = findOptionsForSelectFilter('types', config.custom.filters);
 
   return (
     <div className={classes}>
@@ -63,8 +63,8 @@ const EditEquipmentListingGeneralPanel = props => {
             publicData: {
               listingType: 'equipment',
               types,
-              manufactureYear,
-              maxUsesPerDay
+              manufactureYear: parseInt(manufactureYear),
+              maxUsesPerDay: parseInt(maxUsesPerDay)
             },
           };
 

@@ -17,7 +17,7 @@ export { default as PasswordChangeForm } from './PasswordChangeForm/PasswordChan
 export { default as PasswordRecoveryForm } from './PasswordRecoveryForm/PasswordRecoveryForm';
 export { default as PasswordResetForm } from './PasswordResetForm/PasswordResetForm';
 export { default as PaymentMethodsForm } from './PaymentMethodsForm/PaymentMethodsForm';
-export { default as PriceFilterForm } from './PriceFilterForm/PriceFilterForm';
+export { default as RangeFilterForm } from './RangeFilterForm/RangeFilterForm';
 export { default as ProfileSettingsForm } from './ProfileSettingsForm/ProfileSettingsForm';
 export { default as ReviewForm } from './ReviewForm/ReviewForm';
 export { default as SendMessageForm } from './SendMessageForm/SendMessageForm';

@@ -6,7 +6,7 @@ import { Field, Form as FinalForm, FormSpy } from 'react-final-form';
 import { FormattedMessage, injectIntl, intlShape } from '../../util/reactIntl';
 
 import { Form, RangeSlider } from '../../components';
-import css from './PriceFilterForm.module.css';
+import css from './RangeFilterForm.module.css';
 
 const DEBOUNCE_WAIT_TIME = 400;
 
@@ -30,27 +30,27 @@ const parseMax = (max, currentMin) => value => {
   return parsedValue < currentMin ? currentMin : parsedValue > max ? max : parsedValue;
 };
 
-// PriceFilterForm component
-const PriceFilterFormComponent = props => {
+// RangeFilterForm component
+const RangeFilterFormComponent = props => {
   const { liveEdit, onChange, onSubmit, onCancel, onClear, ...rest } = props;
 
   if (liveEdit && !onChange) {
-    throw new Error('PriceFilterForm: if liveEdit is true you need to provide onChange function');
+    throw new Error('RangeFilterForm: if liveEdit is true you need to provide onChange function');
   }
 
   if (!liveEdit && !(onCancel && onClear && onSubmit)) {
     throw new Error(
-      'PriceFilterForm: if liveEdit is false you need to provide onCancel, onClear, and onSubmit functions'
+      'RangeFilterForm: if liveEdit is false you need to provide onCancel, onClear, and onSubmit functions'
     );
   }
 
   const handleChange = debounce(
     formState => {
       if (formState.dirty) {
-        const { minPrice, maxPrice, ...restValues } = formState.values;
+        const { minRange, maxRange, ...restValues } = formState.values;
         onChange({
-          minPrice: minPrice === '' ? rest.min : minPrice,
-          maxPrice: maxPrice === '' ? rest.max : maxPrice,
+          minRange: minRange === '' ? rest.min : minRange,
+          maxRange: maxRange === '' ? rest.max : maxRange,
           ...restValues,
         });
       }
@@ -60,10 +60,10 @@ const PriceFilterFormComponent = props => {
   );
 
   const handleSubmit = values => {
-    const { minPrice, maxPrice, ...restValues } = values;
+    const { minRange, maxRange, ...restValues } = values;
     return onSubmit({
-      minPrice: minPrice === '' ? rest.min : minPrice,
-      maxPrice: maxPrice === '' ? rest.max : maxPrice,
+      minRange: minRange === '' ? rest.min : minRange,
+      maxRange: maxRange === '' ? rest.max : maxRange,
       ...restValues,
     });
   };
@@ -92,9 +92,10 @@ const PriceFilterFormComponent = props => {
           max,
           step,
         } = formRenderProps;
-        const { minPrice: minPriceRaw, maxPrice: maxPriceRaw } = values;
-        const minPrice = typeof minPriceRaw !== 'string' ? minPriceRaw : min;
-        const maxPrice = typeof maxPriceRaw !== 'string' ? maxPriceRaw : max;
+        const { minRange: minRangeRaw, maxRange: maxRangeRaw } = values;
+        const minRange = typeof minRangeRaw !== 'string' ? minRangeRaw : min;
+        const maxRange = typeof maxRangeRaw !== 'string' ? maxRangeRaw : max;
+
 
         const handleCancel = () => {
           // reset the final form to initialValues
@@ -102,9 +103,9 @@ const PriceFilterFormComponent = props => {
           onCancel();
         };
 
-        const clear = intl.formatMessage({ id: 'PriceFilterForm.clear' });
-        const cancel = intl.formatMessage({ id: 'PriceFilterForm.cancel' });
-        const submit = intl.formatMessage({ id: 'PriceFilterForm.submit' });
+        const clear = intl.formatMessage({ id: 'RangeFilterForm.clear' });
+        const cancel = intl.formatMessage({ id: 'RangeFilterForm.cancel' });
+        const submit = intl.formatMessage({ id: 'RangeFilterForm.submit' });
 
         const classes = classNames(css.root, {
           [css.popup]: showAsPopup,
@@ -123,33 +124,33 @@ const PriceFilterFormComponent = props => {
           >
             <div className={css.contentWrapper}>
               <span className={css.label}>
-                <FormattedMessage id="PriceFilterForm.label" />
+                <FormattedMessage id="RangeFilterForm.label" />
               </span>
               <div className={css.inputsWrapper}>
                 <Field
-                  className={css.minPrice}
-                  id={`${id}.minPrice`}
-                  name="minPrice"
+                  className={css.minRange}
+                  id={`${id}.minRange`}
+                  name="minRange"
                   component="input"
                   type="number"
                   placeholder={min}
                   min={min}
                   max={max}
                   step={step}
-                  parse={parseMin(min, maxPrice)}
+                  parse={parseMin(min, maxRange)}
                 />
-                <span className={css.priceSeparator}>-</span>
+                <span className={css.rangeSeparator}>-</span>
                 <Field
-                  className={css.maxPrice}
-                  id={`${id}.maxPrice`}
-                  name="maxPrice"
+                  className={css.maxRange}
+                  id={`${id}.maxRange`}
+                  name="maxRange"
                   component="input"
                   type="number"
                   placeholder={max}
                   min={min}
                   max={max}
                   step={step}
-                  parse={parseMax(max, minPrice)}
+                  parse={parseMax(max, minRange)}
                 />
               </div>
             </div>
@@ -159,10 +160,10 @@ const PriceFilterFormComponent = props => {
                 min={min}
                 max={max}
                 step={step}
-                handles={[minPrice, maxPrice]}
+                handles={[minRange, maxRange]}
                 onChange={handles => {
-                  form.change('minPrice', handles[0]);
-                  form.change('maxPrice', handles[1]);
+                  form.change('minRange', handles[0]);
+                  form.change('maxRange', handles[1]);
                 }}
               />
             </div>
@@ -184,12 +185,13 @@ const PriceFilterFormComponent = props => {
             )}
           </Form>
         );
-      }}
+      }
+      }
     />
   );
 };
 
-PriceFilterFormComponent.defaultProps = {
+RangeFilterFormComponent.defaultProps = {
   liveEdit: false,
   showAsPopup: false,
   isOpen: false,
@@ -203,7 +205,7 @@ PriceFilterFormComponent.defaultProps = {
   onSubmit: null,
 };
 
-PriceFilterFormComponent.propTypes = {
+RangeFilterFormComponent.propTypes = {
   id: string.isRequired,
   liveEdit: bool,
   showAsPopup: bool,
@@ -222,6 +224,6 @@ PriceFilterFormComponent.propTypes = {
   intl: intlShape.isRequired,
 };
 
-const PriceFilterForm = injectIntl(PriceFilterFormComponent);
+const RangeFilterForm = injectIntl(RangeFilterFormComponent);
 
-export default PriceFilterForm;
+export default RangeFilterForm;
