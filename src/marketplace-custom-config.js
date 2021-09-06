@@ -75,10 +75,10 @@ export const filters = [
   },
   {
     id: 'listingType',
-    label: 'Listing Type',
+    label: 'Product Type',
     type: 'SelectSingleFilter',
     group: 'primary',
-    queryParamNames: ['pub_listing_type'],
+    queryParamNames: ['pub_listingType'],
     config: {
       options: [
         {key: 'sauna', label: 'Saunas'},
@@ -86,6 +86,8 @@ export const filters = [
       ]
     },
   },
+
+  // filters on Sauna listings
   {
     id: 'category',
     label: 'Category',
@@ -156,63 +158,16 @@ export const filters = [
       ],
     },
   },
-];
 
-export const equipmentFilters = [
-  {
-    id: 'dates',
-    label: 'Dates',
-    type: 'BookingDateRangeFilter',
-    group: 'primary',
-    // Note: BookingDateRangeFilter is fixed filter,
-    // you can't change "queryParamNames: ['dates'],"
-    queryParamNames: ['dates'],
-    config: {},
-  },
-  {
-    id: 'price',
-    label: 'Price',
-    type: 'PriceFilter',
-    group: 'primary',
-    // Note: PriceFilter is fixed filter,
-    // you can't change "queryParamNames: ['price'],"
-    queryParamNames: ['price'],
-    // Price filter configuration
-    // Note: unlike most prices this is not handled in subunits
-    config: {
-      min: 0,
-      max: 1000,
-      step: 5,
-    },
-  },
-  {
-    id: 'keyword',
-    label: 'Keyword',
-    type: 'KeywordFilter',
-    group: 'primary',
-    // Note: KeywordFilter is fixed filter,
-    // you can't change "queryParamNames: ['keywords'],"
-    queryParamNames: ['keywords'],
-    // NOTE: If you are ordering search results by distance
-    // the keyword search can't be used at the same time.
-    // You can turn on/off ordering by distance from config.js file.
-    config: {},
-  },
-  {
-    id: 'listingType',
-    label: 'Listing Type',
-    type: 'SelectSingleFilter',
-    group: 'primary',
-    queryParamNames: ['pub_listing_type'],
-    config: {},
-  },
+  // filters on Equipment listings
   {
     id: 'types',
-    label: 'Types',
+    label: 'Types (Equipment)',
     type: 'SelectMultipleFilter',
     group: 'secondary',
     queryParamNames: ['pub_types'],
     config: {
+      searchMode: 'has_all',
       options: [
         { key: 'physics', label: 'Physics' },
         { key: 'math', label: 'Math' },
@@ -223,22 +178,22 @@ export const equipmentFilters = [
   },
   {
     id: 'manufacture-year',
-    label: 'Manufacture year',
-    type: 'SelectSingleFilter',
+    label: 'Manufacture year (Equipment)',
+    type: 'RangeFilter',
     group: 'secondary',
-    queryParamNames: ['pub_manufacture_year'],
+    queryParamNames: ['pub_manufactureYear'],
     config: {
       min: 2000,
-      max: new Date().getFullYear().toString(),
+      max: new Date().getFullYear(),
       step: 1,
     },
   },
   {
     id: 'max-uses-per-day',
-    label: 'Max uses a day',
-    type: 'SelectSingleFilter',
+    label: 'Max uses a day (Equipment)',
+    type: 'RangeFilter',
     group: 'secondary',
-    queryParamNames: ['pub_max_uses_per_day'],
+    queryParamNames: ['pub_maxUsesPerDay'],
     config: {
       min: 1,
       max: 100,

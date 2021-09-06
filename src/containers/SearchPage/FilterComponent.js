@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   BookingDateRangeFilter,
-  PriceFilter,
+  RangeFilter,
   KeywordFilter,
   SelectSingleFilter,
   SelectMultipleFilter,
@@ -69,9 +69,10 @@ const FilterComponent = props => {
         />
       );
     }
-    case 'PriceFilter': {
+    case 'PriceFilter':
+    case 'RangeFilter':
       return (
-        <PriceFilter
+        <RangeFilter
           id={componentId}
           label={label}
           queryParamNames={queryParamNames}
@@ -80,8 +81,7 @@ const FilterComponent = props => {
           {...config}
           {...rest}
         />
-      );
-    }
+      )
     case 'KeywordFilter':
       return (
         <KeywordFilter

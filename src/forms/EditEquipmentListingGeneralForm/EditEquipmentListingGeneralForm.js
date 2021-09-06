@@ -32,7 +32,7 @@ const EditEquipmentListingGeneralFormComponent = props => (
         updated,
         updateInProgress,
         fetchErrors,
-        equipmentFiltersConfig
+        filterConfig
       } = formRenderProps;
 
       // messages for equipment name
@@ -74,7 +74,7 @@ const EditEquipmentListingGeneralFormComponent = props => (
       });
 
       // messages for equipment manufacture year
-      const manufactureYearRange = findMinMaxRangeAndStepForNumberFilter('manufacture-year', equipmentFiltersConfig);
+      const manufactureYearRange = findMinMaxRangeAndStepForNumberFilter('manufacture-year', filterConfig);
 
       const manufactureYearMessage = intl.formatMessage({
         id: 'EditEquipmentListingGeneralForm.manufactureYear',
@@ -94,7 +94,7 @@ const EditEquipmentListingGeneralFormComponent = props => (
       );
 
       // messages for equipment max use per day
-      const maxUsesPerDayRange = findMinMaxRangeAndStepForNumberFilter('max-uses-per-day', equipmentFiltersConfig);
+      const maxUsesPerDayRange = findMinMaxRangeAndStepForNumberFilter('max-uses-per-day', filterConfig);
 
       const maxUsesPerDayMessage = intl.formatMessage({
         id: 'EditEquipmentListingGeneralForm.maxUsesPerDay',
@@ -138,7 +138,7 @@ const EditEquipmentListingGeneralFormComponent = props => (
       const submitInProgress = updateInProgress;
       const submitDisabled = invalid || disabled || submitInProgress;
 
-      const typesOptions = findOptionsForSelectFilter('types', equipmentFiltersConfig);
+      const typesOptions = findOptionsForSelectFilter('types', filterConfig);
 
       return (
         <Form className={classes} onSubmit={handleSubmit}>
@@ -219,7 +219,7 @@ const EditEquipmentListingGeneralFormComponent = props => (
 EditEquipmentListingGeneralFormComponent.defaultProps = {
   className: null,
   fetchErrors: null,
-  equipmentFiltersConfig: config.custom.equipmentFilters,
+  filterConfig: config.custom.filters,
 };
 
 EditEquipmentListingGeneralFormComponent.propTypes = {
@@ -236,7 +236,7 @@ EditEquipmentListingGeneralFormComponent.propTypes = {
     showListingsError: propTypes.error,
     updateListingError: propTypes.error,
   }),
-  equipmentFiltersConfig: propTypes.filterConfig,
+  filterConfig: propTypes.filterConfig,
 };
 
 export default compose(injectIntl)(EditEquipmentListingGeneralFormComponent);
