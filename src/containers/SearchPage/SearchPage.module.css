@@ -22,6 +22,7 @@
   width: 100%;
   flex-grow: 1;
   display: flex;
+  z-index: 0;
 
   @media (--viewportMedium) {
     position: relative;
@@ -35,6 +36,7 @@
   display: flex;
   flex-direction: column;
   padding: 2px 0 0 0;
+  position: relative;
 
   @media (--viewportMedium) {
     padding: 18px 0 0 0;

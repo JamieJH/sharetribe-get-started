@@ -492,6 +492,10 @@ propTypes.error = shape({
   apiErrors: arrayOf(propTypes.apiError),
 });
 
+// product types
+export const LISTING_TYPE_EQUIPMENT = 'equipment';
+export const LISTING_TYPE_SAUNA = 'sauna';
+
 // Options for showing just date or date and time on BookingTimeInfo and BookingBreakdown
 export const DATE_TYPE_DATE = 'date';
 export const DATE_TYPE_DATETIME = 'datetime';

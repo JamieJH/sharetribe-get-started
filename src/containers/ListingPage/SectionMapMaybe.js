@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { string } from 'prop-types';
 import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
-import { propTypes } from '../../util/types';
+import { LISTING_TYPE_EQUIPMENT, LISTING_TYPE_SAUNA, propTypes } from '../../util/types';
 import { obfuscatedCoordinates } from '../../util/maps';
 import { Map } from '../../components';
 import config from '../../config';
@@ -13,6 +13,17 @@ class SectionMapMaybe extends Component {
   constructor(props) {
     super(props);
     this.state = { isStatic: true };
+  }
+
+  getFormatMessageRootName(listingType) {
+    switch (listingType) {
+      case LISTING_TYPE_EQUIPMENT:
+        return 'EquipmentListingPage';
+      case LISTING_TYPE_SAUNA:
+        return 'ListingPage';
+      default:
+        return 'ListingPage';
+    }
   }
 
   render() {
@@ -31,12 +42,12 @@ class SectionMapMaybe extends Component {
     : { address, center: geolocation };
     const map = <Map {...mapProps} useStaticMap={this.state.isStatic} />;
 
-    const listingPageName = (publicData && publicData.listingType === 'equipment') ? "EquipmentListingPage" : "ListingPage";
-    
+    const formatMessageRootName = this.getFormatMessageRootName(publicData.listingType);
+
     return (
       <div className={classes}>
         <h2 className={css.locationTitle}>
-          <FormattedMessage id={`${listingPageName}.locationTitle`} />
+          <FormattedMessage id={`${formatMessageRootName}.locationTitle`} />
         </h2>
         {this.state.isStatic ? (
           <button

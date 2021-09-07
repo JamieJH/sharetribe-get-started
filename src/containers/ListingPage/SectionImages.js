@@ -4,6 +4,7 @@ import { ResponsiveImage, Modal, ImageCarousel } from '../../components';
 import ActionBarMaybe from './ActionBarMaybe';
 
 import css from './ListingPage.module.css';
+import { LISTING_TYPE_EQUIPMENT } from '../../util/types';
 
 const SectionImages = props => {
   const {
@@ -22,16 +23,14 @@ const SectionImages = props => {
   let finalImages = listing.images;
   let firstImage = null;
 
-  if (hasImages) {
+  if (hasImages && isOwnListing && listingType === LISTING_TYPE_EQUIPMENT) {
     const otherImagesUUIDs = listing.attributes.publicData.otherImages;
-    if (listingType === 'equipment' && otherImagesUUIDs) {
-      firstImage = listing.images.find(image => !otherImagesUUIDs[image.id.uuid]);
-      finalImages = [firstImage];
-    }
-    else {
-      firstImage = finalImages[0];
+    if (otherImagesUUIDs && otherImagesUUIDs.length > 0) {
+      finalImages = listing.images.filter(image => otherImagesUUIDs.indexOf(image.id.uuid) === -1);
     }
   }
+
+  firstImage = finalImages[0];
 
   // Action bar is wrapped with a div that prevents the click events
   // to the parent that would otherwise open the image carousel
@@ -41,11 +40,11 @@ const SectionImages = props => {
     </div>
   ) : null;
 
-  const viewPhotosButton = (hasImages && listingType !== 'equipment') ? (
+  const viewPhotosButton = (hasImages) ? (
     <button className={css.viewPhotos} onClick={handleViewPhotosClick}>
       <FormattedMessage
         id="ListingPage.viewImagesButton"
-        values={{ count: listing.images.length }}
+        values={{ count: finalImages.length }}
       />
     </button>
   ) : null;

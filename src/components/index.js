@@ -66,6 +66,7 @@ export { default as ImageFromFile } from './ImageFromFile/ImageFromFile';
 export { default as ListingLink } from './ListingLink/ListingLink';
 export { default as PaginationLinks } from './PaginationLinks/PaginationLinks';
 export { default as ReviewRating } from './ReviewRating/ReviewRating';
+export { default as OtherImagesGrid } from './OtherImagesGrid/OtherImagesGrid'
 
 // Layout helpers
 export { default as LayoutWrapperFooter } from './LayoutWrapperFooter/LayoutWrapperFooter';
@@ -153,7 +154,7 @@ export { default as UserCard } from './UserCard/UserCard';
 //////////////////////////////////////////////
 
 export { default as LayoutWrapperAccountSettingsSideNav } from './LayoutWrapperAccountSettingsSideNav/LayoutWrapperAccountSettingsSideNav';
-export {default as LoadableComponentErrorBoundary } from './LoadableComponentErrorBoundary/LoadableComponentErrorBoundary'
+export { default as LoadableComponentErrorBoundary } from './LoadableComponentErrorBoundary/LoadableComponentErrorBoundary'
 export { default as ModalMissingInformation } from './ModalMissingInformation/ModalMissingInformation';
 export { default as ReviewModal } from './ReviewModal/ReviewModal';
 export { default as PrivacyPolicy } from './PrivacyPolicy/PrivacyPolicy';

@@ -21,56 +21,50 @@ export class EditEquipmentListingPhotosFormComponent extends Component {
     this.state = {
       imageUploadRequested: false,
       otherImages: [],
-      uploadedOtherImagesUUIDs: this.props.initialOtherImagesUUIDs ? { ...this.props.initialOtherImagesUUIDs } : {},
-      isMainImageUploading: false,
-      isMainImageUploaded: this.props.images.length > 0,
+      mainImages: [],
+      uploadedOtherImagesUUIDs: this.props.initialOtherImagesUUIDs ? [...this.props.initialOtherImagesUUIDs] : [],
     };
     this.onImageUploadHandler = this.onImageUploadHandler.bind(this);
-    this.onRemoveMainImage = this.onRemoveMainImage.bind(this);
-    this.setOtherImages = this.setOtherImages.bind(this);
-    this.onRemoveOtherImages = this.onRemoveOtherImages.bind(this);
+    this.onRemoveImage = this.onRemoveImage.bind(this);
+    this.setMainAndOtherImages = this.setMainAndOtherImages.bind(this);
 
-    this.submittedMainImage = [];
+    this.submittedMainImages = [];
     this.submittedOtherImages = [];
   }
 
   componentDidMount() {
-    this.setOtherImages();
+    this.setMainAndOtherImages();
   }
 
-  setOtherImages(uploadedOtherImagesUUIDs = this.state.uploadedOtherImagesUUIDs) {
-    const otherImages = [];
-    if (uploadedOtherImagesUUIDs) {
-      this.props.images.forEach(image => {
-        const imageId = image.id.uuid || (image.imageId && image.imageId.uuid) || image.id;
-        if (uploadedOtherImagesUUIDs[imageId]) {
-          otherImages.push(image);
-        }
-      })
-    }
-
-    this.setState({ otherImages: [...otherImages] });
-  }
-
-  getMainImage() {
-    // this is a new listing
-    if (this.props.images.length === 0) {
-      return [];
-    }
+  setMainAndOtherImages() {
+    // default values for a new listing
+    let mainImages = [];
+    let otherImages = [];
 
     // initialOtherImagesUUIDs undefined and otherImages.length = 0 implies that this listing does 
     // not have other images and user has not added any 
-    // in this case, the main image is the only image avaialble
+    // in this case, the main image is the images array
     if (!this.props.initialOtherImagesUUIDs && this.state.otherImages.length === 0) {
-      return this.props.images;
+      mainImages = [...this.props.images];
     }
+    else {
+      const uploadedOtherImagesUUIDs = this.state.uploadedOtherImagesUUIDs;
+      mainImages = this.props.images.filter(image => {
+        const imageId = image.id.uuid || (image.imageId && image.imageId.uuid) || image.id;
+        return uploadedOtherImagesUUIDs.indexOf(imageId) === -1;
+      })
 
-    const mainImage = this.props.images.find(image => {
-      const imageId = image.id.uuid || (image.imageId && image.imageId.uuid) || image.id;
-      return !this.state.uploadedOtherImagesUUIDs[imageId];
-    })
+      if (uploadedOtherImagesUUIDs) {
+        this.props.images.forEach(image => {
+          const imageId = image.id.uuid || (image.imageId && image.imageId.uuid) || image.id;
+          if (uploadedOtherImagesUUIDs.indexOf(imageId) !== -1) {
+            otherImages.push(image);
+          }
+        })
+      }
 
-    return mainImage ? [mainImage] : [];
+    }
+    this.setState({ mainImages, otherImages });
   }
 
 
@@ -80,19 +74,17 @@ export class EditEquipmentListingPhotosFormComponent extends Component {
       // temporaryImage serves to show a Spinner in ThumbnailWrapper while the image is being uploaded
       // it will be replaced by the uploadedImage when onImageUpload is done
       const temporaryImage = { id: temporaryId, file };
-      if (imageType === 'other') {
-        this.setState(prevState => {
-          return {
-            imageUploadRequested: true,
-            otherImages: [...prevState.otherImages, temporaryImage]
-          }
-        });
-      }
-      else {
-        this.setState({
+      const imageTypeArray = imageType === 'other' ? 'otherImages' : 'mainImages';
+      this.setState(prevState => {
+        return {
           imageUploadRequested: true,
-          isMainImageUploading: true,
-        });
+          [imageTypeArray]: [...prevState[imageTypeArray], temporaryImage]
+        }
+      });
+
+      const updateImageArrayWithResponseImage = (response, file, imagesArray) => {
+        imagesArray.pop();
+        imagesArray.push({ ...response.data, file });
       }
 
       this.props
@@ -105,15 +97,16 @@ export class EditEquipmentListingPhotosFormComponent extends Component {
             if (imageType === 'other') {
               // remove temporaryImage item 
               const newOtherImages = [...prevState.otherImages];
-              newOtherImages.pop();
-              newOtherImages.push({ ...response.data, file });
-              const uploadedOtherImagesUUIDs = { ...prevState.uploadedOtherImagesUUIDs, [response.data.imageId.uuid]: true };
+              updateImageArrayWithResponseImage(response, file, newOtherImages);
+              const uploadedOtherImagesUUIDs = [...prevState.uploadedOtherImagesUUIDs, response.data.imageId.uuid];
               newState.otherImages = newOtherImages;
               newState.uploadedOtherImagesUUIDs = uploadedOtherImagesUUIDs;
             }
             else {
-              newState.isMainImageUploaded = true;
-              newState.isMainImageUploading = false;
+              // remove temporaryImage item 
+              const newMainImages = [...prevState.mainImages];
+              updateImageArrayWithResponseImage(response, file, newMainImages);
+              newState.mainImages = newMainImages;
             }
             return newState;
           })
@@ -121,54 +114,44 @@ export class EditEquipmentListingPhotosFormComponent extends Component {
         .catch(() => {
           this.setState({
             imageUploadRequested: false,
-            isMainImageUploading: false
           });
         });
     }
   }
 
-  onRemoveMainImage(values) {
-    this.setState({ isMainImageUploaded: false })
-    this.props.onRemoveImage(values);
-  }
-
-  async onRemoveOtherImages(values) {
+  async onRemoveImage(values) {
     await this.props.onRemoveImage(values);
-    this.setOtherImages();
+    this.setMainAndOtherImages();
   }
 
   render() {
-    const mainImage = this.getMainImage();
-
     return (
       <FinalForm
         {...this.props}
-        mainImage={mainImage}
+        mainImages={this.state.mainImages}
         otherImages={this.state.otherImages}
-        onRemoveMainImage={this.onRemoveMainImage}
-        onRemoveOtherImages={this.onRemoveOtherImages}
         onImageUploadHandler={this.onImageUploadHandler}
+        onRemoveImage={this.onRemoveImage}
         imageUploadRequested={this.state.imageUploadRequested}
-        initialValues={{ mainImage: mainImage, otherImages: this.state.otherImages }}
+        initialValues={{ mainImages: this.state.mainImages, otherImages: this.state.otherImages }}
         render={formRenderProps => {
           const {
             form,
             className,
             fetchErrors,
             handleSubmit,
-            mainImage,
+            mainImages,
             otherImages,
             imageUploadRequested,
             intl,
             invalid,
             onImageUploadHandler,
-            onRemoveOtherImages,
             disabled,
             ready,
             saveActionMsg,
             updated,
             updateInProgress,
-            onRemoveMainImage
+            onRemoveImage
           } = formRenderProps;
 
           const chooseImageText = (
@@ -222,10 +205,10 @@ export class EditEquipmentListingPhotosFormComponent extends Component {
 
           const submittedOnce = this.submittedOtherImages.length > 0;
           // imgs can contain added images (with temp ids) and submitted images with uniq ids.
-          const arrayOfImgIds = imgs =>
+          const arrayOfImgIds = (imgs) =>
             imgs.map(i => (typeof i.id === 'string' ? i.imageId : i.id));
-          const mainImageIdFromProps = arrayOfImgIds(mainImage);
-          const mainImageIdFromPreviousSubmit = arrayOfImgIds(this.submittedMainImage);
+          const mainImageIdFromProps = arrayOfImgIds(mainImages);
+          const mainImageIdFromPreviousSubmit = arrayOfImgIds(this.submittedMainImages);
           const mainImageArrayHasSameImages = isEqual(mainImageIdFromProps, mainImageIdFromPreviousSubmit);
           const mainImagePristineSinceLastSubmit = submittedOnce && mainImageArrayHasSameImages;
 
@@ -246,7 +229,7 @@ export class EditEquipmentListingPhotosFormComponent extends Component {
               className={classes}
               onSubmit={e => {
                 this.submittedOtherImages = otherImages;
-                this.submittedMainImage = mainImage;
+                this.submittedMainImages = mainImages;
                 handleSubmit(e);
               }}
             >
@@ -262,50 +245,46 @@ export class EditEquipmentListingPhotosFormComponent extends Component {
               </h3>
               <AddImages
                 className={css.imagesField}
-                images={mainImage}
+                images={mainImages}
                 thumbnailClassName={css.thumbnail}
                 savedImageAltText={intl.formatMessage({
                   id: 'EditListingPhotosForm.savedImageAltText',
                 })}
-                onRemoveImage={onRemoveMainImage}
+                onRemoveImage={onRemoveImage}
               >
-                {/* we need 2 states for this because isMainImageUploaded is only updated after successful upload,
-                  during that time, a second main input is shown (though it will then disappear). */}
-                {(this.state.isMainImageUploading || this.state.isMainImageUploaded) ? '' :
-                  <Field
-                    id="addMainImage"
-                    name="addMainImage"
-                    accept={ACCEPT_IMAGES}
-                    form={null}
-                    label={chooseImageText}
-                    type="file"
-                    disabled={imageUploadRequested}
-                  >
-                    {fieldprops => {
-                      const { accept, input, label, disabled: fieldDisabled } = fieldprops;
-                      const { name, type } = input;
-                      const onChange = e => {
-                        const file = e.target.files[0];
-                        form.change(`addMainImage`, file);
-                        form.blur(`addMainImage`);
-                        onImageUploadHandler(file, 'main');
-                      };
-                      const inputProps = { accept, id: name, name, onChange, type };
-                      return (
-                        <div className={css.addImageWrapper}>
-                          <div className={css.aspectRatioWrapper}>
-                            {fieldDisabled ? null : (
-                              <input {...inputProps} className={css.addImageInput} />
-                            )}
-                            <label htmlFor={name} className={css.addImage}>
-                              {label}
-                            </label>
-                          </div>
+                <Field
+                  id="addMainImages"
+                  name="addMainImages"
+                  accept={ACCEPT_IMAGES}
+                  form={null}
+                  label={chooseImageText}
+                  type="file"
+                  disabled={imageUploadRequested}
+                >
+                  {fieldprops => {
+                    const { accept, input, label, disabled: fieldDisabled } = fieldprops;
+                    const { name, type } = input;
+                    const onChange = e => {
+                      const file = e.target.files[0];
+                      form.change(`addMainImages`, file);
+                      form.blur(`addMainImages`);
+                      onImageUploadHandler(file, 'main');
+                    };
+                    const inputProps = { accept, id: name, name, onChange, type };
+                    return (
+                      <div className={css.addImageWrapper}>
+                        <div className={css.aspectRatioWrapper}>
+                          {fieldDisabled ? null : (
+                            <input {...inputProps} className={css.addImageInput} />
+                          )}
+                          <label htmlFor={name} className={css.addImage}>
+                            {label}
+                          </label>
                         </div>
-                      );
-                    }}
-                  </Field>
-                }
+                      </div>
+                    );
+                  }}
+                </Field>
                 <Field
                   component={props => {
                     const { input, meta } = props;
@@ -316,7 +295,7 @@ export class EditEquipmentListingPhotosFormComponent extends Component {
                       </div>
                     );
                   }}
-                  name="mainImage"
+                  name="mainImages"
                   type="hidden"
                   validate={composeValidators(nonEmptyArray(imageRequiredMessage))}
                 />
@@ -334,7 +313,7 @@ export class EditEquipmentListingPhotosFormComponent extends Component {
                 savedImageAltText={intl.formatMessage({
                   id: 'EditListingPhotosForm.savedImageAltText',
                 })}
-                onRemoveImage={onRemoveOtherImages}
+                onRemoveImage={onRemoveImage}
               >
                 <Field
                   id="addOtherImages"

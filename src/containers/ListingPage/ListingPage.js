@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import config from '../../config';
 import routeConfiguration from '../../routeConfiguration';
 import { findOptionsForSelectFilter } from '../../util/search';
-import { LISTING_STATE_PENDING_APPROVAL, LISTING_STATE_CLOSED, propTypes } from '../../util/types';
+import { LISTING_STATE_PENDING_APPROVAL, LISTING_STATE_CLOSED, propTypes, LISTING_TYPE_EQUIPMENT, LISTING_TYPE_SAUNA } from '../../util/types';
 import { types as sdkTypes } from '../../util/sdkLoader';
 import {
   LISTING_PAGE_DRAFT_VARIANT,
@@ -28,6 +28,7 @@ import { richText } from '../../util/richText';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { manageDisableScrolling, isScrollingDisabled } from '../../ducks/UI.duck';
 import { initializeCardPaymentData } from '../../ducks/stripe.duck.js';
+import { getListingFirstTab, getListingUnitType } from '../../util/listingTypesHelpers';
 import {
   Page,
   NamedLink,
@@ -200,6 +201,7 @@ export class ListingPageComponent extends Component {
       lineItems,
       fetchLineItemsInProgress,
       fetchLineItemsError,
+      filterConfigs
     } = this.props;
 
     const listingId = new UUID(rawParams.id);
@@ -242,12 +244,8 @@ export class ListingPageComponent extends Component {
       geolocation = null,
       price = null,
       title = '',
-      publicData,
+      publicData = {},
     } = currentListing.attributes;
-
-    // the type is either 'sauna' or 'equipment'
-    const publicDataListingType = publicData ? publicData.listingType : 'sauna';
-    const listingTab = isDraftVariant ? 'photos' : (publicDataListingType === 'equipment' ? config.firstEquipmentTab : config.firstSaunaTab);
 
     const richTitle = (
       <span>
@@ -391,12 +389,13 @@ export class ListingPageComponent extends Component {
       </NamedLink>
     );
 
-    const unitType = (publicDataListingType === 'equipment') ? config.equipmentBookingUnitType : config.bookingUnitType;
+    const listingTab = isDraftVariant ? 'photos' : getListingFirstTab(publicData.listingType);
+    const unitType = getListingUnitType(publicData.listingType);
 
 
     const getCustomSectionsForSpecificListingType = () => {
-      if (publicDataListingType === 'equipment') {
-        const typesOptions = findOptionsForSelectFilter('types', config.custom.filters);
+      if (publicData.listingType === LISTING_TYPE_EQUIPMENT) {
+        const typesOptions = findOptionsForSelectFilter('types', filterConfigs);
         return <>
           <SectionTypeMaybe options={typesOptions} publicData={publicData} />
           <SectionManuactureYearMaybe publicData={publicData} />
@@ -411,7 +410,7 @@ export class ListingPageComponent extends Component {
         </>
       }
       else {
-        const amenityOptions = findOptionsForSelectFilter('amenities', config.custom.filters);
+        const amenityOptions = findOptionsForSelectFilter('amenities', filterConfigs);
         return <>
           <SectionFeaturesMaybe options={amenityOptions} publicData={publicData} />
           <SectionRulesMaybe publicData={publicData} />
@@ -420,8 +419,8 @@ export class ListingPageComponent extends Component {
     }
 
     const getListingCategory = () => {
-      if (publicData && publicData.listingType !== 'equipment') {
-        const categoryOptions = findOptionsForSelectFilter('category', config.custom.filters);
+      if (publicData && publicData.listingType !== LISTING_TYPE_EQUIPMENT) {
+        const categoryOptions = findOptionsForSelectFilter('category', filterConfigs);
         return publicData && publicData.category ? (
           <span>
             {categoryLabel(categoryOptions, publicData.category)}
@@ -464,7 +463,7 @@ export class ListingPageComponent extends Component {
                   type: listingType,
                   tab: listingTab,
                 }}
-                listingType={publicDataListingType}
+                listingType={publicData.listingType}
                 imageCarouselOpen={this.state.imageCarouselOpen}
                 onImageCarouselClose={() => this.setState({ imageCarouselOpen: false })}
                 handleViewPhotosClick={handleViewPhotosClick}
@@ -547,6 +546,7 @@ ListingPageComponent.defaultProps = {
   sendEnquiryError: null,
   lineItems: null,
   fetchLineItemsError: null,
+  filterConfigs: config.custom.filters,
 };
 
 ListingPageComponent.propTypes = {

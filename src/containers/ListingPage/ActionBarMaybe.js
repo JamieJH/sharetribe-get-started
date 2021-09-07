@@ -7,6 +7,8 @@ import {
   LISTING_STATE_CLOSED,
   LISTING_STATE_DRAFT,
   propTypes,
+  LISTING_TYPE_EQUIPMENT,
+  LISTING_TYPE_SAUNA,
 } from '../../util/types';
 import { NamedLink } from '../../components';
 import EditIcon from './EditIcon';
@@ -33,7 +35,18 @@ export const ActionBarMaybe = props => {
     }
 
     const message = isDraft ? 'ListingPage.finishListing' : 'ListingPage.editListing';
-    const routeName = listingType === 'equipment' ? 'EditEquipmentListingPage' : 'EditListingPage';
+
+    const getEditListingRouteName = (listingType) => {
+      switch (listingType) {
+        case LISTING_TYPE_EQUIPMENT:
+          return 'EditEquipmentListingPage'
+        case LISTING_TYPE_SAUNA:
+          return 'EditListingPage';
+        default:
+          return 'EditListingPage';
+      }
+    }
+    const routeName = getEditListingRouteName(listingType);
 
     const ownListingTextClasses = classNames(css.ownListingText, {
       [css.ownListingTextPendingApproval]: isPendingApproval,

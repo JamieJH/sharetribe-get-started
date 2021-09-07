@@ -3,11 +3,25 @@ import { bool, func, object, shape, string } from 'prop-types';
 import classNames from 'classnames';
 import { FormattedMessage } from '../../util/reactIntl';
 import { ensureOwnListing } from '../../util/data';
-import { LISTING_STATE_DRAFT } from '../../util/types';
+import { LISTING_STATE_DRAFT, LISTING_TYPE_EQUIPMENT, LISTING_TYPE_SAUNA } from '../../util/types';
 import { ListingLink } from '../../components';
 import { EditListingAvailabilityForm } from '../../forms';
 
 import css from './EditListingAvailabilityPanel.module.css';
+
+const DEFAULT_EQUIPMENT_SEATS = 0;
+const DEFAULT_SAUNA_SEATS = 1;
+
+const getSeatsAmount = (listingType) => {
+  switch(listingType) {
+    case LISTING_TYPE_EQUIPMENT:
+      return DEFAULT_EQUIPMENT_SEATS;
+    case LISTING_TYPE_SAUNA:
+      return DEFAULT_SAUNA_SEATS;
+    default:
+      return DEFAULT_SAUNA_SEATS;
+  }
+}
 
 const EditListingAvailabilityPanel = props => {
   const {
@@ -31,7 +45,7 @@ const EditListingAvailabilityPanel = props => {
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
 
   // set default all days are unavailable if listing is equipment
-  const defaultSeatAmount = listing.attributes.publicData.listingType === 'equipment' ? 0 : 1;
+  const defaultSeatAmount = getSeatsAmount(currentListing.attributes.publicData.listingType);
   const defaultAvailabilityPlan = {
     type: 'availability-plan/day',
     entries: [

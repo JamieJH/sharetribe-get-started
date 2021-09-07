@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from '../../util/reactIntl';
 import { InlineTextButton } from '../../components';
 import { LINE_ITEM_NIGHT, LINE_ITEM_DAY } from '../../util/types';
-import config from '../../config';
+import { getListingUnitType } from '../../util/listingTypesHelpers';
 
 import css from './ListingPage.module.css';
 
@@ -18,7 +18,7 @@ const SectionHeading = props => {
     publicData
   } = props;
 
-  const unitType = (publicData && publicData.listingType === 'equipment') ? config.equipmentBookingUnitType : config.bookingUnitType;
+  const unitType = getListingUnitType(publicData.listingType);
   const isNightly = unitType === LINE_ITEM_NIGHT;
   const isDaily = unitType === LINE_ITEM_DAY;
 

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { FormattedMessage } from '../../util/reactIntl';
-import { LISTING_STATE_DRAFT } from '../../util/types';
+import { LISTING_STATE_DRAFT, LISTING_TYPE_EQUIPMENT, LISTING_TYPE_SAUNA } from '../../util/types';
 import { ListingLink } from '../../components';
 import { EditListingPricingForm } from '../../forms';
 import { ensureOwnListing } from '../../util/data';
@@ -33,8 +33,18 @@ const EditListingPricingPanel = props => {
   const { price } = currentListing.attributes;
 
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
-  const formatMessagePanel = listing.attributes.publicData.listingType === 'equipment' ? 'EditEquipmentListingLocationPanel' : 'EditListingLocationPanel';
 
+  const getFormatMessagePanel = (listingType) => {
+    const configurations = {
+      [LISTING_TYPE_EQUIPMENT]: 'EditEquipmentListingPricingPanel',
+      [LISTING_TYPE_SAUNA]: 'EditListingPricingPanel',
+      default: 'EditListingPricingPanel'
+    }
+
+    return configurations[listingType] || configurations.default;
+  }
+
+  const formatMessagePanel = getFormatMessagePanel(currentListing.attributes.publicData.listingType);
   const panelTitle = isPublished ? (
     <FormattedMessage
       id={`${formatMessagePanel}.title`}

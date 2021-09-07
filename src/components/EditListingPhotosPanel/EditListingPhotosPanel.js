@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { array, bool, func, object, string } from 'prop-types';
 import { FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
-import { LISTING_STATE_DRAFT } from '../../util/types';
+import { LISTING_STATE_DRAFT, LISTING_TYPE_EQUIPMENT, LISTING_TYPE_SAUNA } from '../../util/types';
 import { EditEquipmentListingPhotosForm, EditListingPhotosForm } from '../../forms';
 import { ensureOwnListing } from '../../util/data';
 import { ListingLink } from '../../components';
@@ -33,9 +33,7 @@ class EditListingPhotosPanel extends Component {
     const rootClass = rootClassName || css.root;
     const classes = classNames(rootClass, className);
     const currentListing = ensureOwnListing(listing);
-    const listingType = listing.attributes.publicData.listingType;
-    const FormComponent = listingType === 'equipment' ? EditEquipmentListingPhotosForm : EditListingPhotosForm;
-
+    const listingType = currentListing.attributes.publicData.listingType;
 
     const onSaunaPhotosSubmit = (values) => {
       const { addImage, ...updateValues } = values;
@@ -43,18 +41,16 @@ class EditListingPhotosPanel extends Component {
     }
 
     const onEquipmentPhotosSubmit = (values) => {
-      const { addMainImage, addOtherImage, ...updateValues } = values;
-      const { mainImage, otherImages } = updateValues;
-      let images = [...mainImage];
+      const { addMainImages, addOtherImage, ...updateValues } = values;
+      const { mainImages, otherImages } = updateValues;
+      let images = [...mainImages];
       const finalUpdateValues = {};
 
       if (otherImages.length > 0) {
-        // get uuids from otherImages to store in publicData as an object with 
-        // keys are the uuids and values of true, this helps filtering faster
-        const otherImagesUUIDs = Object.assign(...otherImages.map(image => {
-          const uuid = image.id.uuid || image.imageId.uuid;
-          return { [uuid]: true }
-        }));;
+        // get uuids from otherImages to store in publicData as an array
+        const otherImagesUUIDs = otherImages.map(image => {
+          return image.id.uuid || image.imageId.uuid;
+        });
         images = images.concat(otherImages);
         finalUpdateValues.publicData = {
           otherImages: otherImagesUUIDs
@@ -65,7 +61,27 @@ class EditListingPhotosPanel extends Component {
       onSubmit(finalUpdateValues);
     }
 
-    const onSubmitHandler = listingType === 'equipment' ? onEquipmentPhotosSubmit : onSaunaPhotosSubmit;
+    const getFormComponentAndSubmitHandler = (listingType) => {
+      switch (listingType) {
+        case LISTING_TYPE_EQUIPMENT:
+          return {
+            formComponent: EditEquipmentListingPhotosForm,
+            onSubmitHandler: onEquipmentPhotosSubmit
+          }
+        case LISTING_TYPE_SAUNA:
+          return {
+            formComponent: EditListingPhotosForm,
+            onSubmitHandler: onSaunaPhotosSubmit
+          }
+        case LISTING_TYPE_EQUIPMENT:
+          return {
+            formComponent: EditListingPhotosForm,
+            onSubmitHandler: onSaunaPhotosSubmit
+          }
+      }
+    }
+
+    const { formComponent: FormComponent, onSubmitHandler } = getFormComponentAndSubmitHandler(listingType);
 
     const isPublished =
       currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;

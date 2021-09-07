@@ -12,6 +12,8 @@ import {
   LISTING_STATE_CLOSED,
   LISTING_STATE_DRAFT,
   propTypes,
+  LISTING_TYPE_EQUIPMENT,
+  LISTING_TYPE_SAUNA,
 } from '../../util/types';
 import { formatMoney } from '../../util/currency';
 import { ensureOwnListing } from '../../util/data';
@@ -38,6 +40,7 @@ import {
 import MenuIcon from './MenuIcon';
 import Overlay from './Overlay';
 import css from './ManageListingCard.module.css';
+import { getListingFirstTab, getListingUnitType } from '../../util/listingTypesHelpers';
 
 // Menu content needs the same padding
 const MENU_CONTENT_OFFSET = -12;
@@ -70,23 +73,23 @@ const createListingURL = (routes, listing) => {
   const variant = isDraft
     ? LISTING_PAGE_DRAFT_VARIANT
     : isPendingApproval
-    ? LISTING_PAGE_PENDING_APPROVAL_VARIANT
-    : null;
+      ? LISTING_PAGE_PENDING_APPROVAL_VARIANT
+      : null;
 
   const linkProps =
     isPendingApproval || isDraft
       ? {
-          name: 'ListingPageVariant',
-          params: {
-            id,
-            slug,
-            variant,
-          },
-        }
+        name: 'ListingPageVariant',
+        params: {
+          id,
+          slug,
+          variant,
+        },
+      }
       : {
-          name: 'ListingPage',
-          params: { id, slug },
-        };
+        name: 'ListingPage',
+        params: { id, slug },
+      };
 
   return createResourceLocatorString(linkProps.name, routes, linkProps.params, {});
 };
@@ -137,8 +140,6 @@ export const ManageListingCardComponent = props => {
     currentListing.images && currentListing.images.length > 0 ? currentListing.images[0] : null;
 
   const listingType = listing.attributes.publicData.listingType;
-  const firstTab = listingType === 'equipment' ? config.firstEquipmentTab : config.firstSaunaTab;
-  const EditListingPageRouteName = listingType === 'equipment' ? 'EditEquipmentListingPage': 'EditListingPage';
 
   const menuItemClasses = classNames(css.menuItem, {
     [css.menuItemDisabled]: !!actionsInProgressListingId,
@@ -159,6 +160,17 @@ export const ManageListingCardComponent = props => {
     }
   };
 
+  const getEditListingPageRouteName = (listingType) => {
+    switch (listingType) {
+      case LISTING_TYPE_EQUIPMENT:
+        return 'EditEquipmentListingPage';
+      case LISTING_TYPE_SAUNA:
+        return 'EditListingPage';
+      default:
+        return 'EditListingPage';
+    }
+  }
+
   const titleClasses = classNames(css.title, {
     [css.titlePending]: isPendingApproval,
     [css.titleDraft]: isDraft,
@@ -168,7 +180,10 @@ export const ManageListingCardComponent = props => {
     ? LISTING_PAGE_PARAM_TYPE_DRAFT
     : LISTING_PAGE_PARAM_TYPE_EDIT;
 
-  const unitType = listingType === 'equipment' ? config.equipmentBookingUnitType : config.bookingUnitType;
+  const firstTab = getListingFirstTab(listingType);
+  const EditListingPageRouteName = getEditListingPageRouteName(listingType);
+    
+  const unitType = getListingUnitType(listingType);
   const isNightly = unitType === LINE_ITEM_NIGHT;
   const isDaily = unitType === LINE_ITEM_DAY;
 

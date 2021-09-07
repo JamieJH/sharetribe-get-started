@@ -8,6 +8,7 @@ import { NotFoundPage } from './containers';
 // at that point css bundling / imports will happen in wrong order.
 import { NamedRedirect } from './components';
 import config from './config';
+import { LISTING_TYPE_EQUIPMENT, LISTING_TYPE_SAUNA } from './util/types';
 
 const pageDataLoadingAPI = getPageDataLoadingAPI();
 
@@ -129,7 +130,7 @@ const routeConfiguration = () => {
       name: 'EditListingPage',
       auth: true,
       component: (props) => (
-        <EditListingPage listingType='sauna' {...props} />
+        <EditListingPage listingType={LISTING_TYPE_SAUNA} {...props} />
       ),
       loadData: pageDataLoadingAPI.EditListingPage.loadData,
     },
@@ -138,7 +139,7 @@ const routeConfiguration = () => {
       name: 'EditEquipmentListingPage',
       auth: true,
       component: (props) => (
-        <EditListingPage listingType='equipment' {...props} />
+        <EditListingPage listingType={LISTING_TYPE_EQUIPMENT} {...props} />
       ),
       loadData: pageDataLoadingAPI.EditListingPage.loadData,
     },

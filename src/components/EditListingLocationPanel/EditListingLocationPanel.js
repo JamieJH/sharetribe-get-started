@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { FormattedMessage } from '../../util/reactIntl';
-import { LISTING_STATE_DRAFT } from '../../util/types';
+import { LISTING_STATE_DRAFT, LISTING_TYPE_EQUIPMENT, LISTING_TYPE_SAUNA } from '../../util/types';
 import { ensureOwnListing } from '../../util/data';
 import { ListingLink } from '../../components';
 import { EditListingLocationForm } from '../../forms';
@@ -43,6 +43,16 @@ class EditListingLocationPanel extends Component {
     };
   }
 
+  getFormatMessagePanel(listingType) {
+    const configurations =  {
+      [LISTING_TYPE_EQUIPMENT]: 'EditEquipmentListingLocationPanel',
+      [LISTING_TYPE_SAUNA]: 'EditListingLocationPanel',
+      default: 'EditListingLocationPanel'
+    }
+
+    return configurations[listingType] || configurations.default;
+  }
+
   render() {
     const {
       className,
@@ -64,7 +74,7 @@ class EditListingLocationPanel extends Component {
     const isPublished =
       currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
 
-    const formatMessagePanel = listing.attributes.publicData.listingType === 'equipment' ? 'EditEquipmentListingLocationPanel' : 'EditListingLocationPanel';
+    const formatMessagePanel = getFormatMessagePanel(currentListing.attributes.publicData.listingType);
     const panelTitle = isPublished ? (
       <FormattedMessage
         id={`${formatMessagePanel}.title`}

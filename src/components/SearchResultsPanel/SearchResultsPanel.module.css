@@ -17,7 +17,7 @@
   }
 }
 
-.listingCardsContainerMapHiddenDesktop {
+.allCardsOpen {
   @media (--viewportMedium) {
     justify-content: space-between;
   }
@@ -67,7 +67,7 @@
   }
 }
 
-.listingCardMapHiddenDesktop {
+.cardOpen, .listingCardSpaceFiller {
   @media (--viewportMedium) {
     flex-basis: calc(50% - 20px);
     margin-right: 0;
@@ -80,6 +80,10 @@
     flex-basis: 24%;
     margin-right: 0;
   }
+}
+
+.listingCardSpaceFiller {
+  height: 0;
 }
 
 /**
