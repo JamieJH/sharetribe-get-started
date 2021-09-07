@@ -12,7 +12,7 @@ import {
   LISTING_PAGE_PENDING_APPROVAL_VARIANT,
   createSlug,
 } from '../../util/urlHelpers';
-import { LISTING_STATE_DRAFT, LISTING_STATE_PENDING_APPROVAL, propTypes } from '../../util/types';
+import { LISTING_STATE_DRAFT, LISTING_STATE_PENDING_APPROVAL, LISTING_TYPE_EQUIPMENT, LISTING_TYPE_SAUNA, propTypes } from '../../util/types';
 import { ensureOwnListing } from '../../util/data';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
 import { manageDisableScrolling, isScrollingDisabled } from '../../ducks/UI.duck';
@@ -170,7 +170,18 @@ export const EditListingPageComponent = props => {
       ? intl.formatMessage({ id: 'EditListingPage.titleCreateListing' })
       : intl.formatMessage({ id: 'EditListingPage.titleEditListing' });
 
-    const ListingWizardComponent = listingType === 'equipment' ? EditEquipmentListingWizard : EditListingWizard;
+    const getEditListingWizard = (listingType) => {
+      switch (listingType) {
+        case LISTING_TYPE_EQUIPMENT:
+          return EditEquipmentListingWizard
+        case LISTING_TYPE_SAUNA:
+          return EditListingWizard;
+        default:
+          return EditListingWizard;
+      }
+    }
+
+    const ListingWizardComponent = getEditListingWizard(listingType);
 
     return (
       <Page title={title} scrollingDisabled={scrollingDisabled}>

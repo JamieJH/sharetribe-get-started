@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.responsiveImageItem {
+  flex-basis: calc(50% - 6px);
+  margin-bottom: 12px;
+  cursor: pointer;
+
+  @media (--viewportMedium) {
+    flex-basis: calc(33% - 6px);
+  }
+}
+
+.spaceFiller {
+  height: 0;
+  @media (--viewportMedium) {
+    flex-basis: calc(33% - 6px);
+  }
+}

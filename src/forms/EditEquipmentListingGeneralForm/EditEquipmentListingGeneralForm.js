@@ -66,11 +66,8 @@ const EditEquipmentListingGeneralFormComponent = props => (
       const typesMessage = intl.formatMessage({
         id: 'EditEquipmentListingGeneralForm.types',
       });
-      const typesPlaceholderMessage = intl.formatMessage({
-        id: 'EditEquipmentListingGeneralForm.descriptionPlaceholder',
-      });
       const typesRequiredMessage = intl.formatMessage({
-        id: 'EditEquipmentListingGeneralForm.descriptionRequired',
+        id: 'EditEquipmentListingGeneralForm.typesRequired',
       });
 
       // messages for equipment manufacture year
@@ -173,7 +170,6 @@ const EditEquipmentListingGeneralFormComponent = props => (
             className={css.types}
             options={typesOptions}
             label={typesMessage}
-            placeholder={typesPlaceholderMessage}
             validate={composeValidators(required(typesRequiredMessage))}
           />
 

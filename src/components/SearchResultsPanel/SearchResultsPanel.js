@@ -31,16 +31,20 @@ const SearchResultsPanel = props => {
 
   return (
     <div className={classes}>
-      <div className={classNames(css.listingCards, { [css.listingCardsContainerMapHiddenDesktop]: !isMapOpen })}>
+      <div className={classNames(css.listingCards, { [css.allCardsOpen]: !isMapOpen })}>
         {listings.map(l => (
           <ListingCard
-            className={classNames(css.listingCard, { [css.listingCardMapHiddenDesktop]: !isMapOpen })}
+            className={classNames(css.listingCard, { [css.cardOpen]: !isMapOpen })}
             key={l.id.uuid}
             listing={l}
             renderSizes={cardRenderSizes}
             setActiveListing={setActiveListing}
           />
         ))}
+        {/* a space filler for when there are 2 listing cards on the last row,
+        which would cause them to display right and left (middle space is unoccupied)
+        because of space-between */}
+        <div className={css.listingCardSpaceFiller}></div>
         {props.children}
       </div>
       {paginationLinks}

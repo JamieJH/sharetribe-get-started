@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from '../../util/reactIntl';
-import { ResponsiveImage, Modal, ImageCarousel } from '../../components';
+import { Modal, ImageCarousel, OtherImagesGrid } from '../../components';
 
 import css from './ListingPage.module.css';
 import cssText from './SectionTextContentMaybe.module.css';
@@ -15,6 +15,7 @@ const SectionOtherImagesMaybe = props => {
     onManageDisableScrolling,
   } = props;
 
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const otherImagesUUIDs = listing.attributes && listing.attributes.publicData.otherImages;
   let hasOtherImages = otherImagesUUIDs && Object.keys(otherImagesUUIDs).length > 0;
@@ -22,7 +23,7 @@ const SectionOtherImagesMaybe = props => {
   if (!hasOtherImages) {
     return '';
   }
-  
+
   const hasImages = listing.images && listing.images && listing.images.length > 0;
 
   let otherImages = null;
@@ -30,19 +31,14 @@ const SectionOtherImagesMaybe = props => {
   // filter and get all other images
   if (hasImages && hasOtherImages) {
     otherImages = listing.images.filter(image => {
-      return listing.attributes.publicData.otherImages[image.id.uuid];
+      return listing.attributes.publicData.otherImages.indexOf(image.id.uuid) !== -1;
     })
   }
-  const firstImage = otherImages ? otherImages[0] : null;
 
-  const viewPhotosButton = hasImages ? (
-    <button className={css.viewPhotos} onClick={handleViewPhotosClick}>
-      <FormattedMessage
-        id="ListingPage.viewImagesButton"
-        values={{ count: otherImages.length }}
-      />
-    </button>
-  ) : null;
+  const openImageModal = (e, imageIndex) => {
+    handleViewPhotosClick(e);
+    setSelectedImageIndex(imageIndex);
+  }
 
   return (
     <div className={cssText.root}>
@@ -50,22 +46,10 @@ const SectionOtherImagesMaybe = props => {
         <FormattedMessage id="EquipmentListingPage.otherImagesTitle" />
       </h2>
 
-      {/* <div className={css.threeToTwoWrapper}> */}
-        <div className={css.aspectWrapper} onClick={handleViewPhotosClick}>
-          <ResponsiveImage
-            rootClassName={css.rootForImage}
-            alt={title}
-            image={firstImage}
-            variants={[
-              'landscape-crop',
-              'landscape-crop2x',
-              'landscape-crop4x',
-              'landscape-crop6x',
-            ]}
-          />
-          {viewPhotosButton}
-        </div>
-      {/* </div> */}
+      <OtherImagesGrid
+        title={title}
+        otherImages={otherImages}
+        onClick={openImageModal} />
       <Modal
         id="ListingPage.otherImageCarousel"
         scrollLayerClassName={css.carouselModalScrollLayer}
@@ -76,7 +60,11 @@ const SectionOtherImagesMaybe = props => {
         usePortal
         onManageDisableScrolling={onManageDisableScrolling}
       >
-        <ImageCarousel images={otherImages} />
+        <ImageCarousel
+          key={selectedImageIndex}
+          images={otherImages}
+          initialImageIndex={selectedImageIndex}
+        />
       </Modal>
     </div>
   );
